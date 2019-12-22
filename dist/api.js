@@ -18,6 +18,11 @@ class Api {
             extended: false
         }));
         this.api.use(this.logger);
+        this.api.use(this.authanticator);
+    }
+    authanticator(req, res, next) {
+        //if(req.headers.token==null) res.end("unauthorized request !");
+        next();
     }
     logger(req, res, next) {
         console.log('requested => ' + req.url + ' from ' + req.ip);

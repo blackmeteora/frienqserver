@@ -1,5 +1,5 @@
 import mariadb from "mariadb";
-import config from "../dbconfig.json";
+import config from "./dbconfig.json";
 
 class DB {
 
