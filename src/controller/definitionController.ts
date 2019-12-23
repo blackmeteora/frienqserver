@@ -5,6 +5,7 @@ class DefinitionController {
         var conn = await DB.getConnection();
         var result = await conn.query("select * from frienq_def_sex");
         res.send(result);
+        conn.end();
     }
 }
 

@@ -8,20 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../database"));
-class DefinitionController {
-    Sex(req, res) {
+class AuthController {
+    Login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var conn = yield database_1.default.getConnection();
-            var result = yield conn.query("select * from frienq_def_sex");
-            res.send(result);
-            conn.end();
         });
     }
 }
-exports.default = new DefinitionController();
-//# sourceMappingURL=definitionController.js.map
+exports.default = new AuthController();
+//# sourceMappingURL=authController.js.map
