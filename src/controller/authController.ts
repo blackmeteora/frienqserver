@@ -47,6 +47,8 @@ class AuthController {
         
         result = await conn.query("select * from frienq_member where uid=?",[req.body.uid]);
 
+        conn.end();
+
         res.send(result);
     }
 }
