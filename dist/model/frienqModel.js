@@ -13,13 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
-class DefinitionController {
-    Sex(req, res) {
+class FrienqModel {
+    static findByEMail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select * from frienq_def_sex");
-            res.send(result);
+            var result = yield database_1.default.select("select frienq_member.* from frienq_member " +
+                "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  " +
+                "where frienq_member_email.email=?", [email]);
+            if (result.length == 0)
+                return undefined;
+            else
+                return result[0];
+        });
+    }
+    static findByID(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.* from frienq_member " +
+                "where frienq_member.uid=?", [id]);
+            if (result.length == 0)
+                return undefined;
+            else
+                return result[0];
         });
     }
 }
-exports.default = new DefinitionController();
-//# sourceMappingURL=definitionController.js.map
+exports.default = FrienqModel;
+//# sourceMappingURL=frienqModel.js.map

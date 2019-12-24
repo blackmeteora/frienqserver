@@ -1,7 +1,8 @@
 import {validationResult}  from "express-validator";
-import database from "../database";
+import database from "../core/database";
 import ResultModel from "../model/resultModel"
-import Helper from "../helper";
+import Helper from "../core/helper";
+import FrienqModel from "../model/frienqModel";
 class AuthController {
     public async Login(req:any, res:any) {
        
@@ -23,40 +24,40 @@ class AuthController {
             req.body.uid = uuid(); 
         }
         
-        var conn = await database.getConnection();
-        conn.beginTransaction();
         var result;
         try{
-            var result = await conn.query("insert into frienq_member ( uid, id_sex, date_birth, date_sign, date_update, date_online, loc_lat, loc_lan, name, surname, username, password, profile_picture) "+
-            "values (?,?,?,?,?,?,?,?,?,?,?,?,''); ",
-            [
-                req.body.uid,
-                req.body.id_sex,
-                req.body.date_birth,
-                Helper.dateToString(new Date()),
-                Helper.dateToString(new Date()),
-                Helper.dateToString(new Date()),
-                req.body.loc_lat,
-                req.body.loc_lan,
-                req.body.name,
-                req.body.surname,
-                req.body.username,
-                req.body.password
+            result = await database.executeQuery(
+                [
+                    "insert into frienq_member ( uid, id_sex, date_birth, date_sign, date_update, date_online, loc_lat, loc_lan, name, surname, username, password, profile_picture) values (?,?,?,?,?,?,?,?,?,?,?,?,'')",
+                    "insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);"
+                ],
+                [[
+                    req.body.uid,
+                    req.body.id_sex,
+                    req.body.date_birth,
+                    Helper.dateToString(new Date()),
+                    Helper.dateToString(new Date()),
+                    Helper.dateToString(new Date()),
+                    req.body.loc_lat,
+                    req.body.loc_lan,
+                    req.body.name,
+                    req.body.surname,
+                    req.body.username,
+                    req.body.password
+                ],
+                [
+                    req.body.uid, 
+                    req.body.email
+                ]
             ]);
-
-            result = await conn.query("insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);",[req.body.uid, req.body.email]);
-            conn.commit();
         }
         catch(ex){
             resultModel.result=false;
             resultModel.msg = ex;
-            conn.rollback();
             res.send(resultModel);
         }
         
-        result = await conn.query("select * from frienq_member where uid=?",[req.body.uid]);
-
-        conn.end();
+        result =await FrienqModel.findByID(req.body.uid);
         
         resultModel.result=true;
         resultModel.data=result;

@@ -1,9 +1,9 @@
 import express from "express";
-import HomeController from "./controller/homeController";
-import DefinitionController from "./controller/definitionController";
-import AuthController from "./controller/authController";
-import authController from "./controller/authController";
-import v_post_auth_register from "./validator/post_auth_register";
+import HomeController from "../controller/homeController";
+import DefinitionController from "../controller/definitionController";
+import AuthController from "../controller/authController";
+import authController from "../controller/authController";
+import v_post_auth_register from "../validator/post_auth_register";
 
 class Router{
     public ApplyRoutes(api : express.Application){    

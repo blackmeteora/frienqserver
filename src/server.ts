@@ -1,4 +1,4 @@
-import api from "./api"
+import api from "./core/api"
 
 const PORT  =  process.env.PORT || 3000;
 

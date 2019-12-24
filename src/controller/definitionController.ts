@@ -1,10 +1,8 @@
-import DB from "../database";
+import database from "../core/database";
 
 class DefinitionController {
     public async Sex(req:any, res:any) {
-        var conn = await DB.getConnection();
-        var result = await conn.query("select * from frienq_def_sex");
-        conn.end();
+        var result = await database.select("select * from frienq_def_sex");
         res.send(result);
     }
 }

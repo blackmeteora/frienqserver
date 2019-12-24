@@ -13,7 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
-const database_1 = __importDefault(require("../database"));
+const database_1 = __importDefault(require("../core/database"));
+const resultModel_1 = __importDefault(require("../model/resultModel"));
+const helper_1 = __importDefault(require("../core/helper"));
+const frienqModel_1 = __importDefault(require("../model/frienqModel"));
 class AuthController {
     Login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -21,43 +24,51 @@ class AuthController {
     }
     Register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
             var errors = express_validator_1.validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(422).json({ errors: errors.array() });
+                resultModel.result = false;
+                resultModel.msg = errors.array();
+                return res.status(422).json(resultModel);
             }
             if (req.body.uid === undefined) {
                 var uuid = require("uuid/v4");
                 req.body.uid = uuid();
             }
-            var conn = yield database_1.default.getConnection();
-            conn.beginTransaction();
             var result;
             try {
-                var result = yield conn.query("insert into frienq_member ( uid, id_sex, date_birth, date_sign, date_update, date_online, loc_lat, loc_lan, name, surname, username, password, profile_picture) " +
-                    "values (?,?,?,?,?,?,?,?,?,?,?,?,''); ", [
-                    req.body.uid,
-                    req.body.id_sex,
-                    req.body.date_birth,
-                    req.body.date_sign,
-                    req.body.date_update,
-                    req.body.date_online,
-                    req.body.loc_lat,
-                    req.body.loc_lan,
-                    req.body.name,
-                    req.body.surname,
-                    req.body.username,
-                    req.body.password
+                result = yield database_1.default.executeQuery([
+                    "insert into frienq_member ( uid, id_sex, date_birth, date_sign, date_update, date_online, loc_lat, loc_lan, name, surname, username, password, profile_picture) values (?,?,?,?,?,?,?,?,?,?,?,?,'')",
+                    "insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);"
+                ], [[
+                        req.body.uid,
+                        req.body.id_sex,
+                        req.body.date_birth,
+                        helper_1.default.dateToString(new Date()),
+                        helper_1.default.dateToString(new Date()),
+                        helper_1.default.dateToString(new Date()),
+                        req.body.loc_lat,
+                        req.body.loc_lan,
+                        req.body.name,
+                        req.body.surname,
+                        req.body.username,
+                        req.body.password
+                    ],
+                    [
+                        req.body.uid,
+                        req.body.email
+                    ]
                 ]);
-                result = yield conn.query("insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);", [req.body.uid, req.body.email]);
-                conn.commit();
             }
             catch (ex) {
-                conn.rollback();
-                res.send(ex);
+                resultModel.result = false;
+                resultModel.msg = ex;
+                res.send(resultModel);
             }
-            result = yield conn.query("select * from frienq_member where uid=?", [req.body.uid]);
-            conn.end();
-            res.send(result);
+            result = yield frienqModel_1.default.findByID(req.body.uid);
+            resultModel.result = true;
+            resultModel.data = result;
+            res.send(resultModel);
         });
     }
 }

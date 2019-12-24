@@ -1,8 +1,16 @@
 import {check}  from "express-validator";
+import FrienqModel from "../model/frienqModel";
 
 export default [
     check('email').not().isEmpty().withMessage("Value Can't Be Empty"),
     check('email').isEmail(),
+    check('email').custom((value)=>{
+        return FrienqModel.findByEMail(value).then(result => {
+            if (result) {
+              return Promise.reject('E-mail already in use by another user !');
+            }
+          });
+    }),
     check('id_sex').not().isEmpty().withMessage("Value Can't Be Empty"),
     check('id_sex').isNumeric(),
     check('email').isLength({min:4}),
