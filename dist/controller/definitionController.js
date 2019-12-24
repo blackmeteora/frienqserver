@@ -18,8 +18,8 @@ class DefinitionController {
         return __awaiter(this, void 0, void 0, function* () {
             var conn = yield database_1.default.getConnection();
             var result = yield conn.query("select * from frienq_def_sex");
-            res.send(result);
             conn.end();
+            res.send(result);
         });
     }
 }

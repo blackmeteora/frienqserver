@@ -15,7 +15,7 @@ class Api {
     config() {
         this.api.use(body_parser_1.default.json());
         this.api.use(body_parser_1.default.urlencoded({
-            extended: false
+            extended: true
         }));
         this.api.use(this.logger);
         this.api.use(this.authanticator);

@@ -15,7 +15,7 @@ class Api {
     private config(): void {
         this.api.use(bodyParser.json());
         this.api.use(bodyParser.urlencoded({
-            extended: false
+            extended: true
         }));
         this.api.use(this.logger);
         this.api.use(this.authanticator);
@@ -23,6 +23,7 @@ class Api {
 
     private authanticator(req:Request, res:Response, next:any):void{
         //if(req.headers.token==null) res.end("unauthorized request !");
+        
         next();
     }
 
