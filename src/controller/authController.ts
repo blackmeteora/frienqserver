@@ -1,14 +1,21 @@
 import {validationResult}  from "express-validator";
 import database from "../database";
+import ResultModel from "../model/resultModel"
+import Helper from "../helper";
 class AuthController {
     public async Login(req:any, res:any) {
        
     }
 
     public async Register(req:any, res:any) {
+        
+        var resultModel = new ResultModel();
+
         var errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(422).json({ errors: errors.array() });
+            resultModel.result = false;
+            resultModel.msg = errors.array();
+            return res.status(422).json(resultModel);
         }
         
         if(req.body.uid===undefined){
@@ -26,9 +33,9 @@ class AuthController {
                 req.body.uid,
                 req.body.id_sex,
                 req.body.date_birth,
-                req.body.date_sign,
-                req.body.date_update,
-                req.body.date_online,
+                Helper.dateToString(new Date()),
+                Helper.dateToString(new Date()),
+                Helper.dateToString(new Date()),
                 req.body.loc_lat,
                 req.body.loc_lan,
                 req.body.name,
@@ -41,15 +48,20 @@ class AuthController {
             conn.commit();
         }
         catch(ex){
+            resultModel.result=false;
+            resultModel.msg = ex;
             conn.rollback();
-            res.send(ex);
+            res.send(resultModel);
         }
         
         result = await conn.query("select * from frienq_member where uid=?",[req.body.uid]);
 
         conn.end();
+        
+        resultModel.result=true;
+        resultModel.data=result;
 
-        res.send(result);
+        res.send(resultModel);
     }
 }
 export default new AuthController();
