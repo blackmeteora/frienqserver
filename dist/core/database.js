@@ -67,7 +67,6 @@ class DB {
     }
     freeConnection() {
         this.Conn.end();
-        this.Conn.destroy();
         this.Conn = null;
     }
 }

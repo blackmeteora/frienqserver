@@ -13,11 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
+const resultModel_1 = __importDefault(require("../model/resultModel"));
 class DefinitionController {
     Sex(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select * from frienq_def_sex");
-            res.send(result);
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.data = yield database_1.default.select("select * from frienq_def_sex");
+                resultModel.result = true;
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.data = null;
+                resultModel.msg = ex;
+            }
+            res.send(resultModel);
         });
     }
 }

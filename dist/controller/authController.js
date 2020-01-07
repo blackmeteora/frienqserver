@@ -12,14 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_validator_1 = require("express-validator");
 const database_1 = __importDefault(require("../core/database"));
 const resultModel_1 = __importDefault(require("../model/resultModel"));
 const helper_1 = __importDefault(require("../core/helper"));
 const frienqModel_1 = __importDefault(require("../model/frienqModel"));
+const express_validator_1 = require("express-validator");
 class AuthController {
     Login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            var errors = express_validator_1.validationResult(req);
+            if (!errors.isEmpty()) {
+                resultModel.result = false;
+                resultModel.msg = "Validation Failed !";
+                return res.status(422).json(resultModel);
+            }
+            try {
+                resultModel.result = true;
+                resultModel.data = yield frienqModel_1.default.getLoginToken(req.body.email, req.body.password);
+                if (resultModel.data == null)
+                    throw new Error("Unauthorized Login !");
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.data = null;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
         });
     }
     Register(req, res) {
@@ -28,7 +47,7 @@ class AuthController {
             var errors = express_validator_1.validationResult(req);
             if (!errors.isEmpty()) {
                 resultModel.result = false;
-                resultModel.msg = errors.array();
+                resultModel.msg = "Validation Failed !";
                 return res.status(422).json(resultModel);
             }
             if (req.body.uid === undefined) {
@@ -62,7 +81,7 @@ class AuthController {
             }
             catch (ex) {
                 resultModel.result = false;
-                resultModel.msg = ex;
+                resultModel.msg = ex.message;
                 res.send(resultModel);
             }
             result = yield frienqModel_1.default.findByID(req.body.uid);

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
+const helper_1 = __importDefault(require("../core/helper"));
 class FrienqModel {
     static findByEMail(email) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -33,6 +34,26 @@ class FrienqModel {
                 return undefined;
             else
                 return result[0];
+        });
+    }
+    static getLoginToken(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.uid, frienq_member_session.session_key from frienq_member " +
+                "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  " +
+                "left join frienq_member_session on frienq_member.uid=frienq_member_session.uid_member  " +
+                "where frienq_member_email.email=? and frienq_member.password=?", [email, password]);
+            if (result.length != 1)
+                return null;
+            if (result[0].session_key == null) {
+                var uuid = require("uuid/v4");
+                var key = uuid();
+                var execresult = yield database_1.default.executeQuery(["insert into frienq_member_session (uid_member,session_key,date_create) values (?,?,?)"], [[result[0].uid, key, helper_1.default.dateToString(new Date())]]);
+                result = yield database_1.default.select("select frienq_member.uid, frienq_member_session.session_key from frienq_member " +
+                    "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  " +
+                    "left join frienq_member_session on frienq_member.uid=frienq_member_session.uid_member  " +
+                    "where frienq_member_email.email=? and frienq_member.password=?", [email, password]);
+            }
+            return result[0].session_key;
         });
     }
 }
