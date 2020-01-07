@@ -3,7 +3,8 @@ import {validationResult}  from "express-validator";
 import bodyParser from "body-parser";
 import router from "./router"
 import {Request, Response} from "express";
-import ResultModel from "../model/resultModel"
+import ResultModel from "../model/resultModel";
+import FrienqModel from "../model/frienqModel";
 
 class Api {
     public api : express.Application;
@@ -36,9 +37,25 @@ class Api {
     }
 
     private authanticator(req:Request, res:Response, next:any):void{
-        //if(req.headers.token==null) res.end("unauthorized request !");
         
-        next();
+        var guestRoute = [
+            "/auth/login",
+            "/auth/register",
+            "/definition/sex"
+        ];
+        
+        if(guestRoute.indexOf(req.path.toLowerCase())>-1) next();
+        else{
+            var token = req.headers["access-token"];
+            if(token==null) res.status(401).end("Unauthorized Request !");
+            FrienqModel.findByToken(token.toString()).then((user)=>{
+                if(user==null) res.status(401).end("Unauthorized Request !");
+                else {
+                    req.body.user = user;
+                    next();
+                }
+            });
+        }
     }
 
     private logger(req:Request, res:Response, next:any):void {

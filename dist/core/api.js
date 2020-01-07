@@ -8,6 +8,7 @@ const express_validator_1 = require("express-validator");
 const body_parser_1 = __importDefault(require("body-parser"));
 const router_1 = __importDefault(require("./router"));
 const resultModel_1 = __importDefault(require("../model/resultModel"));
+const frienqModel_1 = __importDefault(require("../model/frienqModel"));
 class Api {
     constructor() {
         this.api = express_1.default();
@@ -34,8 +35,26 @@ class Api {
         next();
     }
     authanticator(req, res, next) {
-        //if(req.headers.token==null) res.end("unauthorized request !");
-        next();
+        var guestRoute = [
+            "/auth/login",
+            "/auth/register",
+            "/definition/sex"
+        ];
+        if (guestRoute.indexOf(req.path.toLowerCase()) > -1)
+            next();
+        else {
+            var token = req.headers["access-token"];
+            if (token == null)
+                res.status(401).end("Unauthorized Request !");
+            frienqModel_1.default.findByToken(token.toString()).then((user) => {
+                if (user == null)
+                    res.status(401).end("Unauthorized Request !");
+                else {
+                    req.body.user = user;
+                    next();
+                }
+            });
+        }
     }
     logger(req, res, next) {
         console.log('requested => ' + req.url + ' from ' + req.ip);
