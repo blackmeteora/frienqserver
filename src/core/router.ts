@@ -4,6 +4,7 @@ import DefinitionController from "../controller/definitionController";
 import AuthController from "../controller/authController";
 import authController from "../controller/authController";
 import v_post_auth_register from "../validator/post_auth_register";
+import v_post_auth_login from "../validator/post_auth_login";
 
 class Router{
     public ApplyRoutes(api : express.Application){    
@@ -16,7 +17,7 @@ class Router{
         //End Definition Controller
 
         //Begin Auth Controller
-        api.route("/Auth/Login").post(AuthController.Login);
+        api.post("/Auth/Login", v_post_auth_login, AuthController.Login);
         api.post("/Auth/Register", v_post_auth_register, authController.Register);
         
         //End Auth Controller

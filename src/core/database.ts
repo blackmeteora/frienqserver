@@ -57,7 +57,6 @@ class DB {
 
     public freeConnection():void{
         this.Conn.end();
-        this.Conn.destroy();
         this.Conn = null;
     }
 }

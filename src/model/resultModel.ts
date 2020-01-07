@@ -5,6 +5,6 @@ export default class ResultModel{
     }
 
     public result : boolean;
-    public msg : object;
+    public msg : any;
     public data : object;
 }

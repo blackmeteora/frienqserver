@@ -1,24 +1,41 @@
-import {validationResult}  from "express-validator";
 import database from "../core/database";
 import ResultModel from "../model/resultModel"
 import Helper from "../core/helper";
 import FrienqModel from "../model/frienqModel";
+import {validationResult}  from "express-validator";
 class AuthController {
     public async Login(req:any, res:any) {
-       
+        var resultModel = new ResultModel();
+        var errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            resultModel.result = false;
+            resultModel.msg = "Validation Failed !";
+            return res.status(422).json(resultModel);
+        }
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await FrienqModel.getLoginToken(req.body.email, req.body.password);
+            if(resultModel.data==null) throw new Error("Unauthorized Login !");
+        }catch(ex){
+            resultModel.result=false;
+            resultModel.data=null;
+            resultModel.msg=ex.message;
+        }
+        res.send(resultModel);
     }
 
     public async Register(req:any, res:any) {
         
         var resultModel = new ResultModel();
-
+        
         var errors = validationResult(req);
         if (!errors.isEmpty()) {
             resultModel.result = false;
-            resultModel.msg = errors.array();
+            resultModel.msg = "Validation Failed !";
             return res.status(422).json(resultModel);
         }
-        
+
         if(req.body.uid===undefined){
             var uuid = require("uuid/v4");
             req.body.uid = uuid(); 
@@ -53,7 +70,7 @@ class AuthController {
         }
         catch(ex){
             resultModel.result=false;
-            resultModel.msg = ex;
+            resultModel.msg = ex.message;
             res.send(resultModel);
         }
         
