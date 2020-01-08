@@ -45,7 +45,7 @@ class Api {
             "/definition/sex"
         ];
         
-        if(guestRoute.indexOf(req.path.toLowerCase())>-1) next();
+        if(guestRoute.indexOf(req.path.toLowerCase())>-1 || guestRoute.indexOf(req.path.toLowerCase()+"/")>-1) next();
         else{
             var token = req.headers["access-token"];
             if(token==null) {
