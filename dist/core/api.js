@@ -41,7 +41,7 @@ class Api {
             "/auth/register",
             "/definition/sex"
         ];
-        if (guestRoute.indexOf(req.path.toLowerCase()) > -1 || guestRoute.indexOf(req.path.toLowerCase() + "/") > -1)
+        if (guestRoute.indexOf(req.path.toLowerCase()) > -1 || guestRoute.indexOf(req.path.substring(0, req.path.length - 1).toLowerCase()) > -1)
             next();
         else {
             var token = req.headers["access-token"];
