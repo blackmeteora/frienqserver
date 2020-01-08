@@ -39,6 +39,7 @@ class Api {
     private authanticator(req:Request, res:Response, next:any):void{
         
         var guestRoute = [
+            "/",
             "/auth/login",
             "/auth/register",
             "/definition/sex"
@@ -47,7 +48,10 @@ class Api {
         if(guestRoute.indexOf(req.path.toLowerCase())>-1) next();
         else{
             var token = req.headers["access-token"];
-            if(token==undefined || token==null) res.status(401).end("Unauthorized Request !");
+            if(token==null) {
+                res.status(401).end("Unauthorized Request !");
+                return;
+            }
             FrienqModel.findByToken(token.toString()).then((user)=>{
                 if(user==null) res.status(401).end("Unauthorized Request !");
                 else {
