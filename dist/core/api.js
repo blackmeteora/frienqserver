@@ -44,7 +44,7 @@ class Api {
             next();
         else {
             var token = req.headers["access-token"];
-            if (token == null)
+            if (token == undefined || token == null)
                 res.status(401).end("Unauthorized Request !");
             frienqModel_1.default.findByToken(token.toString()).then((user) => {
                 if (user == null)
