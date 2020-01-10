@@ -71,6 +71,12 @@ class FrienqModel {
             return result[0].session_key;
         });
     }
+    static updateProfilePicture(uid, fileName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.executeQuery(["update frienq_member set profile_picture=? where uid=?"], [[fileName, uid]]);
+            return result;
+        });
+    }
 }
 exports.default = FrienqModel;
 //# sourceMappingURL=frienqModel.js.map

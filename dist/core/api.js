@@ -9,6 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const router_1 = __importDefault(require("./router"));
 const resultModel_1 = __importDefault(require("../model/resultModel"));
 const frienqModel_1 = __importDefault(require("../model/frienqModel"));
+var qs = require('querystring');
 class Api {
     constructor() {
         this.api = express_1.default();
@@ -21,6 +22,7 @@ class Api {
             extended: true
         }));
         this.api.use(this.logger);
+        this.api.use(this.queryParser);
         this.api.use(this.authanticator);
         //this.api.use(this.validator);
     }
@@ -32,6 +34,14 @@ class Api {
             resultModel.msg = errors.array();
             res.status(422).end(resultModel);
         }
+        next();
+    }
+    queryParser(req, res, next) {
+        var str = "";
+        if (req.url.split('?').length > 1) {
+            str = req.url.split('?')[1];
+        }
+        req.headers["QueryString"] = qs.parse(str);
         next();
     }
     authanticator(req, res, next) {
@@ -54,6 +64,7 @@ class Api {
                     res.status(401).end("Unauthorized Request !");
                 else {
                     req.body.user = user;
+                    req.headers["user"] = user;
                     next();
                 }
             });

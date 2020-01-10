@@ -9,6 +9,8 @@ const authController_1 = __importDefault(require("../controller/authController")
 const frienqController_1 = __importDefault(require("../controller/frienqController"));
 const post_auth_register_1 = __importDefault(require("../validator/post_auth_register"));
 const post_auth_login_1 = __importDefault(require("../validator/post_auth_login"));
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
 class Router {
     ApplyRoutes(api) {
         //Begin Home Controller
@@ -23,6 +25,8 @@ class Router {
         //End Auth Controller
         //Begin Frienq Controller
         api.get("/Frienq/ProfilData", frienqController_1.default.ProfilData);
+        api.get("/Frienq/ProfilePicture", frienqController_1.default.ProfilePicture);
+        api.post("/Frienq/ProfilePicture", upload.single('image'), frienqController_1.default.ProfilePicture);
         //End Auth Controller
     }
 }
