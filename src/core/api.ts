@@ -5,6 +5,7 @@ import router from "./router"
 import {Request, Response} from "express";
 import ResultModel from "../model/resultModel";
 import FrienqModel from "../model/frienqModel";
+var qs = require('querystring');
 
 class Api {
     public api : express.Application;
@@ -21,6 +22,7 @@ class Api {
             extended: true
         }));
         this.api.use(this.logger);
+        this.api.use(this.queryParser);
         this.api.use(this.authanticator);
         //this.api.use(this.validator);
     }
@@ -33,6 +35,15 @@ class Api {
             resultModel.msg = errors.array();
             res.status(422).end(resultModel);
         }
+        next();
+    }
+
+    private queryParser(req:Request, res:Response, next:any):void {
+        var str = "";
+        if(req.url.split('?').length>1){
+            str = req.url.split('?')[1];
+        }
+        req.headers["QueryString"] = qs.parse(str);
         next();
     }
 
@@ -56,6 +67,7 @@ class Api {
                 if(user==null) res.status(401).end("Unauthorized Request !");
                 else {
                     req.body.user = user;
+                    req.headers["user"] = user;
                     next();
                 }
             });

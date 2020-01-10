@@ -61,4 +61,9 @@ export default class FrienqModel {
 
         return result[0].session_key;
     }
+
+    public static async updateProfilePicture(uid:string, fileName:string){
+        var result = await database.executeQuery(["update frienq_member set profile_picture=? where uid=?"],[[fileName,uid]]);
+        return result;
+    }
 }

@@ -5,6 +5,8 @@ import AuthController from "../controller/authController";
 import FrienqController from "../controller/frienqController";
 import v_post_auth_register from "../validator/post_auth_register";
 import v_post_auth_login from "../validator/post_auth_login";
+var multer  = require('multer');
+var upload = multer({dest: 'uploads/'})
 
 class Router{
     public ApplyRoutes(api : express.Application){    
@@ -23,6 +25,8 @@ class Router{
 
         //Begin Frienq Controller
         api.get("/Frienq/ProfilData", FrienqController.ProfilData);
+        api.get("/Frienq/ProfilePicture", FrienqController.ProfilePicture);
+        api.post("/Frienq/ProfilePicture",upload.single('image'), FrienqController.ProfilePicture);
         //End Auth Controller
     }
 }
