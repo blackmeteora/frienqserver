@@ -12,10 +12,8 @@ class FrienqController {
     }
 
     public ProfilePicture(req:any, res:any){
-        var user = req.headers["user"];
-
-        if(req.headers["QueryString"].p!=null){
-            var file = path.resolve(`./data/user/${user.uid}/profilepicture/${req.headers["QueryString"].p}`);
+        if(req.params.uid!=null && req.params.file!=null){
+            var file = path.resolve(`./data/user/${req.params.uid}/profilepicture/${req.params.file}`);
             var image = fs.createReadStream(file);
             image.on('open', function () {
                 //res.set('Content-Type', type);
@@ -28,7 +26,7 @@ class FrienqController {
         }
         else{
             var result = new ResultModel();
-
+            var user = req.headers["user"];
             var tempPath = req.file.path;
             var fileExtension = path.extname(req.file.originalname).toLowerCase();
             var uuid = require("uuid/v4");
