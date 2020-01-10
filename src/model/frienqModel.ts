@@ -27,7 +27,7 @@ export default class FrienqModel {
     public static async findByToken(token:string){
         var result = await database.select(
             "select frienq_member.uid, frienq_member.name, frienq_member.surname, frienq_member_email.email, "+
-            "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex "+
+            "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex, frienq_member.profile_picture "+
             "from frienq_member "+
             "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member and isdefault=1 "+
             "inner join frienq_def_sex on frienq_member.id_sex=frienq_def_sex.id "+
