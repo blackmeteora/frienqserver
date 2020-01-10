@@ -12,11 +12,11 @@ class FrienqController {
     }
 
     public ProfilePicture(req:any, res:any){
-        if(req.params.uid!=null && req.params.file!=null){
-            var file = path.resolve(`./data/user/${req.params.uid}/profilepicture/${req.params.file}`);
+        if(req.headers["QueryString"].u!=null && req.headers["QueryString"].f!=null){
+            var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/profilepicture/${req.headers["QueryString"].f}`);
             var image = fs.createReadStream(file);
             image.on('open', function () {
-                res.set('Content-Type', "image/jpeg");
+                //res.set('Content-Type', "image/jpeg");
                 image.pipe(res);
             });
             image.on('error', function () {

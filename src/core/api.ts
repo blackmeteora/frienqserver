@@ -53,7 +53,8 @@ class Api {
             "/",
             "/auth/login",
             "/auth/register",
-            "/definition/sex"
+            "/definition/sex",
+            "/frienq/getprofilepicture"
         ];
         
         if(guestRoute.indexOf(req.path.toLowerCase())>-1 || guestRoute.indexOf(req.path.substring(0,req.path.length-1).toLowerCase())>-1) next();

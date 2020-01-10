@@ -25,7 +25,7 @@ class Router{
 
         //Begin Frienq Controller
         api.get("/Frienq/ProfilData", FrienqController.ProfilData);
-        api.get("/Frienq/ProfilePicture/:uid/:file", FrienqController.ProfilePicture);
+        api.get("/Frienq/GetProfilePicture", FrienqController.ProfilePicture);
         api.post("/Frienq/ProfilePicture",upload.single('image'), FrienqController.ProfilePicture);
         //End Auth Controller
     }
