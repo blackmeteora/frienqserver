@@ -28,7 +28,7 @@ class FrienqController {
             var file = path_1.default.resolve(`./data/user/${req.params.uid}/profilepicture/${req.params.file}`);
             var image = fs_1.default.createReadStream(file);
             image.on('open', function () {
-                //res.set('Content-Type', type);
+                res.set('Content-Type', "image/jpeg");
                 image.pipe(res);
             });
             image.on('error', function () {
