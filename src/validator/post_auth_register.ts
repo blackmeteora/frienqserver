@@ -23,6 +23,13 @@ export default [
     check('name').not().isEmpty().withMessage("Value Can't Be Empty"),
     check('surname').not().isEmpty().withMessage("Value Can't Be Empty"),
     check('username').not().isEmpty().withMessage("Value Can't Be Empty"),
+    check('username').custom((value)=>{
+      return FrienqModel.findByUserName(value).then(result => {
+          if (result) {
+            return Promise.reject('Username already in use by another user !');
+          }
+        });
+    }),
     check('password').not().isEmpty().withMessage("Value Can't Be Empty"),
 ]
 

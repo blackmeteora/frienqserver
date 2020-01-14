@@ -21,6 +21,7 @@ class Router{
         //Begin Auth Controller
         api.post("/Auth/Login", v_post_auth_login, AuthController.Login);
         api.post("/Auth/Register", v_post_auth_register, AuthController.Register);
+        api.post("/Auth/Register/CheckUserName", AuthController.CheckUserName);
         //End Auth Controller
 
         //Begin Frienq Controller

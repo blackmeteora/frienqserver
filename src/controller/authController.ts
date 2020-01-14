@@ -81,5 +81,19 @@ class AuthController {
 
         res.send(resultModel);
     }
+
+    public async CheckUserName(req:any, res:any){
+        var resultModel = new ResultModel();
+        try {
+            resultModel.result = true;
+            resultModel.data = (await FrienqModel.findByUserName(req.body.username)==null)
+        }catch(ex){
+            resultModel.result=false;
+            resultModel.msg = ex.message;
+            res.send(resultModel);
+        }
+
+        res.send(resultModel);
+    }
 }
 export default new AuthController();

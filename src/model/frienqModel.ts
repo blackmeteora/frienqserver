@@ -14,6 +14,14 @@ export default class FrienqModel {
         if(result.length==0) return undefined;
         else return result[0];
     }
+
+    public static async findByUserName(username:string){
+        var result = await database.select(
+            "select frienq_member.* from frienq_member where frienq_member.username=?",[username])
+        
+        if(result.length==0) return undefined;
+        else return result[0];
+    }
     
     public static async findByID(id:string){
         var result = await database.select(
