@@ -27,6 +27,13 @@ exports.default = [
     express_validator_1.check('name').not().isEmpty().withMessage("Value Can't Be Empty"),
     express_validator_1.check('surname').not().isEmpty().withMessage("Value Can't Be Empty"),
     express_validator_1.check('username').not().isEmpty().withMessage("Value Can't Be Empty"),
+    express_validator_1.check('username').custom((value) => {
+        return frienqModel_1.default.findByUserName(value).then(result => {
+            if (result) {
+                return Promise.reject('Username already in use by another user !');
+            }
+        });
+    }),
     express_validator_1.check('password').not().isEmpty().withMessage("Value Can't Be Empty"),
 ];
 //# sourceMappingURL=post_auth_register.js.map

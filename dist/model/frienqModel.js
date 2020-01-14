@@ -26,6 +26,15 @@ class FrienqModel {
                 return result[0];
         });
     }
+    static findByUserName(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.* from frienq_member where frienq_member.username=?", [username]);
+            if (result.length == 0)
+                return undefined;
+            else
+                return result[0];
+        });
+    }
     static findByID(id) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_member.* from frienq_member " +

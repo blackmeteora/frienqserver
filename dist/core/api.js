@@ -49,6 +49,7 @@ class Api {
             "/",
             "/auth/login",
             "/auth/register",
+            "/auth/register/checkusername",
             "/definition/sex",
             "/frienq/getprofilepicture"
         ];

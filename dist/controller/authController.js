@@ -90,6 +90,21 @@ class AuthController {
             res.send(resultModel);
         });
     }
+    CheckUserName(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = ((yield frienqModel_1.default.findByUserName(req.body.username)) == null);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+                res.send(resultModel);
+            }
+            res.send(resultModel);
+        });
+    }
 }
 exports.default = new AuthController();
 //# sourceMappingURL=authController.js.map

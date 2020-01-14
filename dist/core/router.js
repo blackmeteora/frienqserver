@@ -22,6 +22,7 @@ class Router {
         //Begin Auth Controller
         api.post("/Auth/Login", post_auth_login_1.default, authController_1.default.Login);
         api.post("/Auth/Register", post_auth_register_1.default, authController_1.default.Register);
+        api.post("/Auth/Register/CheckUserName", authController_1.default.CheckUserName);
         //End Auth Controller
         //Begin Frienq Controller
         api.get("/Frienq/ProfilData", frienqController_1.default.ProfilData);
