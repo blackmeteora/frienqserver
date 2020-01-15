@@ -1,7 +1,7 @@
 export default class ResultModel{
 
     constructor() {
-        
+
     }
 
     public result : boolean;

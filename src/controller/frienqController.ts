@@ -8,7 +8,18 @@ class FrienqController {
     }
 
     public async SearchFrienq(req:any, res:any) {
-        res.send(await FrienqModel.search(req.body.key))
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data=await FrienqModel.search(req.body.key);
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
     }
 
     public ProfilData(req:any, res:any):void{

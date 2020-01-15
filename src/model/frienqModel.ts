@@ -15,6 +15,26 @@ export default class FrienqModel {
         else return result[0];
     }
 
+    public static async frienq(uid:string){
+        var result = await database.select(
+            "select frienq_member.* from frienq_member "+
+            "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  "+
+            "where frienq_member_email.email=?",[uid])
+        
+        if(result.length==0) return undefined;
+        else return result[0];
+    }
+
+    public static async unFrienq(uid:string){
+        var result = await database.select(
+            "select frienq_member.* from frienq_member "+
+            "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  "+
+            "where frienq_member_email.email=?",[uid])
+        
+        if(result.length==0) return undefined;
+        else return result[0];
+    }
+
     public static async search(keyword:string){
         var result = await database.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, "+
         "frienq_member.username, frienq_member.date_birth, frienq_member.id_sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count "+

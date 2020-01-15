@@ -22,7 +22,16 @@ class FrienqController {
     }
     SearchFrienq(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            res.send(yield frienqModel_1.default.search(req.body.key));
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                result.data = yield frienqModel_1.default.search(req.body.key);
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
         });
     }
     ProfilData(req, res) {
