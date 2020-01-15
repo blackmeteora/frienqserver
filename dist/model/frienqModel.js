@@ -91,7 +91,7 @@ class FrienqModel {
             var result = yield database_1.default.select("select frienq_member.uid, frienq_member_session.session_key from frienq_member " +
                 "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member and isdefault=1 " +
                 "left join frienq_member_session on frienq_member.uid=frienq_member_session.uid_member  " +
-                "where (frienq_member_email.email=? or frienq_member_email.username=?) and frienq_member.password=?", [email, email, password]);
+                "where (frienq_member_email.email=? or frienq_member.username=?) and frienq_member.password=?", [email, email, password]);
             if (result.length != 1)
                 return null;
             if (result[0].session_key == null) {
