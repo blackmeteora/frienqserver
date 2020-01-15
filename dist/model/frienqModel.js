@@ -26,22 +26,18 @@ class FrienqModel {
                 return result[0];
         });
     }
-    static frienq(uid) {
+    static frienq(owner, uid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select frienq_member.* from frienq_member " +
-                "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  " +
-                "where frienq_member_email.email=?", [uid]);
+            var result = yield database_1.default.executeQuery(["insert into frienq_member_frienq (uid_owner,uid_member) values (?,?)"], [[owner, uid]]);
             if (result.length == 0)
                 return undefined;
             else
                 return result[0];
         });
     }
-    static unFrienq(uid) {
+    static unFrienq(owner, uid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select frienq_member.* from frienq_member " +
-                "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  " +
-                "where frienq_member_email.email=?", [uid]);
+            var result = yield database_1.default.executeQuery(["delete from frienq_member_frienq where uid_owner=? and uid_member=?"], [[owner, uid]]);
             if (result.length == 0)
                 return undefined;
             else

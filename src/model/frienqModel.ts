@@ -15,21 +15,15 @@ export default class FrienqModel {
         else return result[0];
     }
 
-    public static async frienq(uid:string){
-        var result = await database.select(
-            "select frienq_member.* from frienq_member "+
-            "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  "+
-            "where frienq_member_email.email=?",[uid])
+    public static async frienq(owner:string, uid:string){
+        var result = await database.executeQuery(["insert into frienq_member_frienq (uid_owner,uid_member) values (?,?)"],[[owner,uid]]);
         
         if(result.length==0) return undefined;
         else return result[0];
     }
 
-    public static async unFrienq(uid:string){
-        var result = await database.select(
-            "select frienq_member.* from frienq_member "+
-            "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member  "+
-            "where frienq_member_email.email=?",[uid])
+    public static async unFrienq(owner:string, uid:string){
+        var result = await database.executeQuery(["delete from frienq_member_frienq where uid_owner=? and uid_member=?"],[[owner,uid]]);
         
         if(result.length==0) return undefined;
         else return result[0];

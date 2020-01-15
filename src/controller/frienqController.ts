@@ -22,6 +22,26 @@ class FrienqController {
         res.send(result);
     }
 
+    public async FrienqOp(req:any, res:any) {
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            if(req.body.op==1){
+                result.data=await FrienqModel.frienq(req.body.uid_member, req.body.user.uid);
+            }else{
+                result.data=await FrienqModel.unFrienq(req.body.uid_member, req.body.user.uid);
+            }
+            result.data = result.data["affectedRows"]==1;
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
+    }
+
     public ProfilData(req:any, res:any):void{
         res.send(req.body.user);
     }

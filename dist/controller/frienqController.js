@@ -34,6 +34,26 @@ class FrienqController {
             res.send(result);
         });
     }
+    FrienqOp(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                if (req.body.op == 1) {
+                    result.data = yield frienqModel_1.default.frienq(req.body.uid_member, req.body.user.uid);
+                }
+                else {
+                    result.data = yield frienqModel_1.default.unFrienq(req.body.uid_member, req.body.user.uid);
+                }
+                result.data = result.data["affectedRows"] == 1;
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
+        });
+    }
     ProfilData(req, res) {
         res.send(req.body.user);
     }
