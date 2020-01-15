@@ -20,6 +20,11 @@ class FrienqController {
     Index(req, res) {
         res.end('Hello From Frienq Api !');
     }
+    SearchFrienq(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            res.send(yield frienqModel_1.default.search(req.body.key));
+        });
+    }
     ProfilData(req, res) {
         res.send(req.body.user);
     }

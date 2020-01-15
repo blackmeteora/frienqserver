@@ -7,6 +7,10 @@ class FrienqController {
         res.end('Hello From Frienq Api !')
     }
 
+    public async SearchFrienq(req:any, res:any) {
+        res.send(await FrienqModel.search(req.body.key))
+    }
+
     public ProfilData(req:any, res:any):void{
         res.send(req.body.user);
     }

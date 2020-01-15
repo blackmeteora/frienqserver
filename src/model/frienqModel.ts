@@ -15,6 +15,14 @@ export default class FrienqModel {
         else return result[0];
     }
 
+    public static async search(keyword:string){
+        var result = await database.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, "+
+        "frienq_member.username, frienq_member.date_birth, frienq_member.id_sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count "+
+        "from frienq_member where username like ? or CONCAT(name,surname) like ? order by rate limit 50",["%"+keyword+"%","%"+keyword+"%"])
+        
+        return result;
+    }
+
     public static async findByUserName(username:string){
         var result = await database.select(
             "select frienq_member.* from frienq_member where frienq_member.username=?",[username])
@@ -35,7 +43,7 @@ export default class FrienqModel {
     public static async findByToken(token:string){
         var result = await database.select(
             "select frienq_member.uid, frienq_member.name, frienq_member.surname, frienq_member_email.email, "+
-            "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex, frienq_member.profile_picture "+
+            "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count "+
             "from frienq_member "+
             "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member and isdefault=1 "+
             "inner join frienq_def_sex on frienq_member.id_sex=frienq_def_sex.id "+

@@ -26,6 +26,14 @@ class FrienqModel {
                 return result[0];
         });
     }
+    static search(keyword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, " +
+                "frienq_member.username, frienq_member.date_birth, frienq_member.id_sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count " +
+                "from frienq_member where username like ? or CONCAT(name,surname) like ? order by rate limit 50", ["%" + keyword + "%", "%" + keyword + "%"]);
+            return result;
+        });
+    }
     static findByUserName(username) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_member.* from frienq_member where frienq_member.username=?", [username]);
@@ -48,7 +56,7 @@ class FrienqModel {
     static findByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, frienq_member_email.email, " +
-                "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex, frienq_member.profile_picture " +
+                "frienq_member.username, frienq_member.date_birth, frienq_def_sex.value sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count " +
                 "from frienq_member " +
                 "inner join frienq_member_email on frienq_member.uid=frienq_member_email.uid_member and isdefault=1 " +
                 "inner join frienq_def_sex on frienq_member.id_sex=frienq_def_sex.id " +
