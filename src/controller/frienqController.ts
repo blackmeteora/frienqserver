@@ -12,7 +12,7 @@ class FrienqController {
 
         try{
             result.result=true;
-            result.data=await FrienqModel.search(req.body.key);
+            result.data=await FrienqModel.search(req.body.user.uid, req.body.key);
         }
         catch(ex){
             result.result=false;

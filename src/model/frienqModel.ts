@@ -29,10 +29,13 @@ export default class FrienqModel {
         else return result[0];
     }
 
-    public static async search(keyword:string){
+    public static async search(uid:string ,keyword:string){
         var result = await database.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, "+
-        "frienq_member.username, frienq_member.date_birth, frienq_member.id_sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count "+
-        "from frienq_member where username like ? or CONCAT(name,surname) like ? order by rate limit 50",["%"+keyword+"%","%"+keyword+"%"])
+        "frienq_member.username, frienq_member.date_birth, frienq_member.id_sex, frienq_member.profile_picture, frienq_member.rate, frienq_member.owned_frienq_count, frienq_member.frienq_count, "+
+        "case when ISNULL(frienq_member_frienq.uid_owner) then 0 else 1 end as is_frienq "+
+        "from frienq_member "+
+        "left join frienq_member_frienq on frienq_member_frienq.uid_owner = frienq_member.uid and frienq_member_frienq.uid_member = ? "+
+        "where frienq_member.username like ? or CONCAT(frienq_member.name,frienq_member.surname) like ? order by rate limit 50",[uid, "%"+keyword+"%","%"+keyword+"%"])
         
         return result;
     }

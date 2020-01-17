@@ -25,7 +25,7 @@ class FrienqController {
             var result = new resultModel_1.default();
             try {
                 result.result = true;
-                result.data = yield frienqModel_1.default.search(req.body.key);
+                result.data = yield frienqModel_1.default.search(req.body.user.uid, req.body.key);
             }
             catch (ex) {
                 result.result = false;
