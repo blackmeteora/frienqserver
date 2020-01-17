@@ -74,6 +74,19 @@ class FrienqModel {
                 return result[0];
         });
     }
+    static profilData(requestUid, uid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.*, " +
+                "case when ISNULL(frienq_member_frienq.uid_owner) then 0 else 1 end as is_frienq " +
+                "from frienq_member " +
+                "left join frienq_member_frienq on frienq_member_frienq.uid_owner = frienq_member.uid and frienq_member_frienq.uid_member = ? " +
+                "where frienq_member.uid=?", [uid, requestUid]);
+            if (result.length == 0)
+                return undefined;
+            else
+                return result[0];
+        });
+    }
     static findByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_member.uid, frienq_member.name, frienq_member.surname, frienq_member_email.email, " +

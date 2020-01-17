@@ -42,8 +42,20 @@ class FrienqController {
         res.send(result);
     }
 
-    public ProfilData(req:any, res:any):void{
-        res.send(req.body.user);
+    public async ProfilData(req:any, res:any) {
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data=await FrienqModel.profilData(req.body.uid, req.body.user.uid);
+            delete result.data.password;
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
     }
 
     public ProfilePicture(req:any, res:any){
