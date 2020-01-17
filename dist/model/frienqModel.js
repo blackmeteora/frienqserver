@@ -119,7 +119,7 @@ class FrienqModel {
                     "left join frienq_member_session on frienq_member.uid=frienq_member_session.uid_member  " +
                     "where frienq_member_email.email=? and frienq_member.password=?", [email, password]);
             }
-            return result[0].session_key;
+            return result[0];
         });
     }
     static updateProfilePicture(uid, fileName) {

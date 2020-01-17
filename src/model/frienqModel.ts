@@ -103,7 +103,7 @@ export default class FrienqModel {
                 "where frienq_member_email.email=? and frienq_member.password=?",[email, password]);
         }
 
-        return result[0].session_key;
+        return result[0];
     }
 
     public static async updateProfilePicture(uid:string, fileName:string){
