@@ -55,6 +55,18 @@ class FrienqModel {
             return result;
         });
     }
+    static getFrienqList(owner, uid, lastusername, mode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //mode = 0 -> Takip Edenler , mode = 1 -> Takip Edilenler
+            var result = yield database_1.default.select("select frienq_member.*, " +
+                "case when ISNULL(frienq_member_frienq.uid_owner) then 0 else 1 end as is_frienq " +
+                "from frienq_member " +
+                "inner join frienq_member_frienq frienq_member_frienq1 on  " + (mode == 0 ? "frienq_member_frienq1.uid_member=frienq_member.uid and frienq_member_frienq1.uid_owner=" : "frienq_member_frienq1.uid_owner=frienq_member.uid and frienq_member_frienq1.uid_member=") + "? " +
+                "left join frienq_member_frienq on frienq_member_frienq.uid_owner = frienq_member.uid and frienq_member_frienq.uid_member = ? " +
+                "where frienq_member.username>? order by username limit 50", [uid, owner, lastusername]);
+            return result;
+        });
+    }
     static findByUserName(username) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_member.* from frienq_member where frienq_member.username=?", [username]);

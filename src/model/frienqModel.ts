@@ -40,6 +40,18 @@ export default class FrienqModel {
         return result;
     }
 
+    public static async getFrienqList(owner:string ,uid:string, lastusername:string, mode: number){
+        //mode = 0 -> Takip Edenler , mode = 1 -> Takip Edilenler
+        var result = await database.select("select frienq_member.*, "+
+        "case when ISNULL(frienq_member_frienq.uid_owner) then 0 else 1 end as is_frienq "+
+        "from frienq_member "+
+        "inner join frienq_member_frienq frienq_member_frienq1 on  "+(mode==0 ? "frienq_member_frienq1.uid_member=frienq_member.uid and frienq_member_frienq1.uid_owner=":"frienq_member_frienq1.uid_owner=frienq_member.uid and frienq_member_frienq1.uid_member=")+"? "+
+        "left join frienq_member_frienq on frienq_member_frienq.uid_owner = frienq_member.uid and frienq_member_frienq.uid_member = ? "+
+        "where frienq_member.username>? order by username limit 50",[uid,owner,lastusername])
+        
+        return result;
+    }
+
     public static async findByUserName(username:string){
         var result = await database.select(
             "select frienq_member.* from frienq_member where frienq_member.username=?",[username])

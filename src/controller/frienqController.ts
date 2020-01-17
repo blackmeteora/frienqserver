@@ -42,6 +42,22 @@ class FrienqController {
         res.send(result);
     }
 
+    public async FrienqList(req:any, res:any) {
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data = await FrienqModel.getFrienqList(req.body.user.uid, req.body.uid, req.body.lastusername, req.body.mode);
+            for(var i=0; i<result.data.length;i++) delete result.data[0].password;
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
+    }
+
     public async ProfilData(req:any, res:any) {
         var result =  new ResultModel();
 

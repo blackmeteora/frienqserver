@@ -54,6 +54,22 @@ class FrienqController {
             res.send(result);
         });
     }
+    FrienqList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                result.data = yield frienqModel_1.default.getFrienqList(req.body.user.uid, req.body.uid, req.body.lastusername, req.body.mode);
+                for (var i = 0; i < result.data.length; i++)
+                    delete result.data[0].password;
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
+        });
+    }
     ProfilData(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = new resultModel_1.default();
