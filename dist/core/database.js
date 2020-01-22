@@ -66,8 +66,7 @@ class DB {
         });
     }
     freeConnection() {
-        this.Conn.end();
-        this.Conn = null;
+        this.Conn.release();
     }
 }
 exports.default = new DB();

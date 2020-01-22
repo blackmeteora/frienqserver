@@ -11,9 +11,9 @@
     "dev": "nodemon src/server.ts",
     "dev:debug": "nodemon --inspect src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pregitadd":"npm run build",
+    "pregitadd": "npm run build",
     "gitadd": "git add .",
-    "pregitcommit" : "npm run gitadd",
+    "pregitcommit": "npm run gitadd",
     "gitcommit": "git commit -m \"Release Commit\"",
     "prepush": "npm run gitcommit",
     "push": "git push origin master"
@@ -21,10 +21,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/socket.io": "^2.1.4",
     "express": "^4.17.1",
     "express-validator": "^6.3.0",
     "mariadb": "^2.1.4",
     "multer": "^1.4.2",
+    "socket.io": "^2.3.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

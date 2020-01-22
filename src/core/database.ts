@@ -5,7 +5,7 @@ class DB {
 
     public Pool:mariadb.Pool;
 
-    public Conn:mariadb.Connection;
+    public Conn:mariadb.PoolConnection;
 
     constructor(){
         this.Pool = mariadb.createPool(config);
@@ -56,8 +56,7 @@ class DB {
     }
 
     public freeConnection():void{
-        this.Conn.end();
-        this.Conn = null;
+        this.Conn.release();
     }
 }
 
