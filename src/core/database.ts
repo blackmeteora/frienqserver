@@ -5,58 +5,40 @@ class DB {
 
     public static Pool:mariadb.Pool;
 
-    public Conn:mariadb.PoolConnection;
-
     constructor(){
         if(DB.Pool==null) DB.Pool = mariadb.createPool(config);
     }
 
     public async executeQuery(query:Array<string>, params:Array<Array<any>>=undefined){
 
-        if(this.Conn==null){
-            try{
-                this.Conn = await DB.Pool.getConnection();
-            }catch (ex){
-                throw ex;
-            }
-        }
+        var Conn = await DB.Pool.getConnection();
 
         try{
-            this.Conn.beginTransaction();
+            Conn.beginTransaction();
             var result = Array<object>(); 
-            for(var i=0; i<query.length;i++) result.push(await this.Conn.query(query[i],params[i]));
-            this.Conn.commit();
-            this.freeConnection();
+            for(var i=0; i<query.length;i++) result.push(await Conn.query(query[i],params[i]));
+            Conn.commit();
+            Conn.release();
             return result;
         }catch(ex){
-            this.Conn.rollback();
-            this.freeConnection();
+            Conn.rollback();
+            Conn.release();
             throw ex;
         }
     }
 
     public async select(query:string, params:Array<any>=undefined){
 
-        if(this.Conn==null){
-            try{
-                this.Conn = await DB.Pool.getConnection();
-            }catch (ex){
-                throw ex;
-            }
-        }
+        var Conn = await DB.Pool.getConnection();
 
         try{
-            var result = this.Conn.query(query,params);
-            this.freeConnection();
+            var result = Conn.query(query,params);
+            Conn.release();
             return result;
         }catch(ex){
-            this.freeConnection();
+            Conn.release();
             throw ex;
         }
-    }
-
-    public freeConnection():void{
-        this.Conn.release();
     }
 }
 

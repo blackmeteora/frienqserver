@@ -21,53 +21,36 @@ class DB {
     }
     executeQuery(query, params = undefined) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.Conn == null) {
-                try {
-                    this.Conn = yield DB.Pool.getConnection();
-                }
-                catch (ex) {
-                    throw ex;
-                }
-            }
+            var Conn = yield DB.Pool.getConnection();
             try {
-                this.Conn.beginTransaction();
+                Conn.beginTransaction();
                 var result = Array();
                 for (var i = 0; i < query.length; i++)
-                    result.push(yield this.Conn.query(query[i], params[i]));
-                this.Conn.commit();
-                this.freeConnection();
+                    result.push(yield Conn.query(query[i], params[i]));
+                Conn.commit();
+                Conn.release();
                 return result;
             }
             catch (ex) {
-                this.Conn.rollback();
-                this.freeConnection();
+                Conn.rollback();
+                Conn.release();
                 throw ex;
             }
         });
     }
     select(query, params = undefined) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.Conn == null) {
-                try {
-                    this.Conn = yield DB.Pool.getConnection();
-                }
-                catch (ex) {
-                    throw ex;
-                }
-            }
+            var Conn = yield DB.Pool.getConnection();
             try {
-                var result = this.Conn.query(query, params);
-                this.freeConnection();
+                var result = Conn.query(query, params);
+                Conn.release();
                 return result;
             }
             catch (ex) {
-                this.freeConnection();
+                Conn.release();
                 throw ex;
             }
         });
-    }
-    freeConnection() {
-        this.Conn.release();
     }
 }
 exports.default = new DB();
