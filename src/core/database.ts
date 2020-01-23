@@ -3,19 +3,19 @@ import config from "../dbconfig.json";
 
 class DB {
 
-    public Pool:mariadb.Pool;
+    public static Pool:mariadb.Pool;
 
     public Conn:mariadb.PoolConnection;
 
     constructor(){
-        this.Pool = mariadb.createPool(config);
+        if(DB.Pool==null) DB.Pool = mariadb.createPool(config);
     }
 
     public async executeQuery(query:Array<string>, params:Array<Array<any>>=undefined){
 
         if(this.Conn==null){
             try{
-                this.Conn = await this.Pool.getConnection();
+                this.Conn = await DB.Pool.getConnection();
             }catch (ex){
                 throw ex;
             }
@@ -39,7 +39,7 @@ class DB {
 
         if(this.Conn==null){
             try{
-                this.Conn = await this.Pool.getConnection();
+                this.Conn = await DB.Pool.getConnection();
             }catch (ex){
                 throw ex;
             }

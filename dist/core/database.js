@@ -16,13 +16,14 @@ const mariadb_1 = __importDefault(require("mariadb"));
 const dbconfig_json_1 = __importDefault(require("../dbconfig.json"));
 class DB {
     constructor() {
-        this.Pool = mariadb_1.default.createPool(dbconfig_json_1.default);
+        if (DB.Pool == null)
+            DB.Pool = mariadb_1.default.createPool(dbconfig_json_1.default);
     }
     executeQuery(query, params = undefined) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.Conn == null) {
                 try {
-                    this.Conn = yield this.Pool.getConnection();
+                    this.Conn = yield DB.Pool.getConnection();
                 }
                 catch (ex) {
                     throw ex;
@@ -48,7 +49,7 @@ class DB {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.Conn == null) {
                 try {
-                    this.Conn = yield this.Pool.getConnection();
+                    this.Conn = yield DB.Pool.getConnection();
                 }
                 catch (ex) {
                     throw ex;
