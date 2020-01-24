@@ -1,17 +1,15 @@
 import api from "./core/api";
-import io from "socket.io";
 import http from "http";
+import netserver from "./socket"
 
 
-const PORT =  process.env.PORT || 3000;
+var PORT =  3000;
+const SPORT =  3001;
+
 const server = http.createServer(api);
 
-let socket = require("socket.io")(http);
+netserver.server.listen(SPORT);
 
-socket.on("connection", function(socket: any) {
-    console.log("a user connected");
-});
-
-api.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log('listening on port ' + PORT);
 })
