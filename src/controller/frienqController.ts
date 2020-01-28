@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import ResultModel from "../model/resultModel";
 import FrienqModel from "../model/frienqModel";
+import FrienqNotificationModel from '../model/frienqNotificationModel';
 class FrienqController {
     public Index(req:any, res:any):void{
         res.end('Hello From Frienq Api !')
@@ -33,6 +34,7 @@ class FrienqController {
                 result.data=await FrienqModel.unFrienq(req.body.uid_member, req.body.user.uid);
             }
             result.data = result.data["affectedRows"]==1;
+            FrienqNotificationModel.sendNotifications(req.body.uid_member);
         }
         catch(ex){
             result.result=false;
@@ -123,6 +125,21 @@ class FrienqController {
                 });
             }
         }
+    }
+
+    public async Notifications(req:any, res:any){
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data = await FrienqNotificationModel.getNotifications(req.body.user);
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
     }
 }
 

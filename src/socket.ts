@@ -1,7 +1,23 @@
 import net from "net";
+import SocketModel from './model/socketModel';
+import FrienqModel from './model/frienqModel';
 
 let netserver = net.createServer();
-var socketlist:any[][] = [];
+var socketlist:SocketModel[] = [];
+
+function findSocketByToken(token:String){
+    for(var i=0;i<socketlist.length;i++){
+        if(socketlist[i].token==token) return socketlist[i];
+    }
+    return null;
+}
+
+function findSocketByUID(uid:String){
+    for(var i=0;i<socketlist.length;i++){
+        if(socketlist[i].user.uid==uid) return socketlist[i];
+    }
+    return null;
+}
 
 netserver.on("connection", function(socket: any) {
 
@@ -28,7 +44,7 @@ netserver.on("connection", function(socket: any) {
 
     socket.setEncoding('utf8');
 
-    socket.setTimeout(800000,function(){
+    socket.setTimeout(80000000,function(){
         // called after timeout -> same as socket.on('timeout')
         // it just tells that soket timed out => its ur job to end or destroy the socket.
         // socket.end() vs socket.destroy() => end allows us to send final data and allows some i/o activity to finish before destroying the socket
@@ -37,7 +53,7 @@ netserver.on("connection", function(socket: any) {
     });
 
 
-    socket.on('data',function(data:any){
+    socket.on('data',async function(data:any){
         var bread = socket.bytesRead;
         var bwrite = socket.bytesWritten;
         console.log('Bytes read : ' + bread);
@@ -45,16 +61,26 @@ netserver.on("connection", function(socket: any) {
         console.log('Data sent to server : ' + data);
 
         var netdata = data.split('::::');
+
+        var user = await FrienqModel.findByToken(netdata[0]);
+
+        if(user==null) socket.destroy();
+
         if(netdata.length!=3){
             socket.write('Data::::Invalid Protocol');
-            socket.flush();
+            //socket.flush();
             return;
-        } 
+        }
 
-        if(netdata[1]=="Hello"){
-            socketlist[netdata[0]].push(socket);
+        if(netdata[2]=="Hello"){
+            var old = findSocketByToken(netdata[0]);
+            if(old == null) socketlist.push(new SocketModel(netdata[0], socket, user));
+            else{
+                old.socket = socket;
+            }
             socket.write('Data::::Hello');
-        } 
+            //setTimeout(function(){socket.write('Data::::Out Stream');},5000);
+        }
 
     });
 
@@ -101,4 +127,4 @@ netserver.on('close',function(){
     console.log('Server closed !');
   });
 
-export default {server : netserver, socketlist : socketlist};
+export default {server : netserver, socketlist : socketlist, findSocketByToken : findSocketByToken, findSocketByUID:findSocketByUID};

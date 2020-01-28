@@ -16,6 +16,7 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const resultModel_1 = __importDefault(require("../model/resultModel"));
 const frienqModel_1 = __importDefault(require("../model/frienqModel"));
+const frienqNotificationModel_1 = __importDefault(require("../model/frienqNotificationModel"));
 class FrienqController {
     Index(req, res) {
         res.end('Hello From Frienq Api !');
@@ -46,6 +47,7 @@ class FrienqController {
                     result.data = yield frienqModel_1.default.unFrienq(req.body.uid_member, req.body.user.uid);
                 }
                 result.data = result.data["affectedRows"] == 1;
+                frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
             }
             catch (ex) {
                 result.result = false;
@@ -136,6 +138,20 @@ class FrienqController {
                 });
             }
         }
+    }
+    Notifications(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                result.data = yield frienqNotificationModel_1.default.getNotifications(req.body.user);
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
+        });
     }
 }
 exports.default = new FrienqController();

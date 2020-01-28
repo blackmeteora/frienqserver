@@ -1,11 +1,36 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const net_1 = __importDefault(require("net"));
+const socketModel_1 = __importDefault(require("./model/socketModel"));
+const frienqModel_1 = __importDefault(require("./model/frienqModel"));
 let netserver = net_1.default.createServer();
 var socketlist = [];
+function findSocketByToken(token) {
+    for (var i = 0; i < socketlist.length; i++) {
+        if (socketlist[i].token == token)
+            return socketlist[i];
+    }
+    return null;
+}
+function findSocketByUID(uid) {
+    for (var i = 0; i < socketlist.length; i++) {
+        if (socketlist[i].user.uid == uid)
+            return socketlist[i];
+    }
+    return null;
+}
 netserver.on("connection", function (socket) {
     var lport = socket.localPort;
     var laddr = socket.localAddress;
@@ -24,7 +49,7 @@ netserver.on("connection", function (socket) {
         console.log('Number of concurrent connections to the server : ' + count);
     });
     socket.setEncoding('utf8');
-    socket.setTimeout(800000, function () {
+    socket.setTimeout(80000000, function () {
         // called after timeout -> same as socket.on('timeout')
         // it just tells that soket timed out => its ur job to end or destroy the socket.
         // socket.end() vs socket.destroy() => end allows us to send final data and allows some i/o activity to finish before destroying the socket
@@ -32,21 +57,32 @@ netserver.on("connection", function (socket) {
         console.log('Socket timed out');
     });
     socket.on('data', function (data) {
-        var bread = socket.bytesRead;
-        var bwrite = socket.bytesWritten;
-        console.log('Bytes read : ' + bread);
-        console.log('Bytes written : ' + bwrite);
-        console.log('Data sent to server : ' + data);
-        var netdata = data.split('::::');
-        if (netdata.length != 3) {
-            socket.write('Data::::Invalid Protocol');
-            socket.flush();
-            return;
-        }
-        if (netdata[1] == "Hello") {
-            socketlist[netdata[0]].push(socket);
-            socket.write('Data::::Hello');
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            var bread = socket.bytesRead;
+            var bwrite = socket.bytesWritten;
+            console.log('Bytes read : ' + bread);
+            console.log('Bytes written : ' + bwrite);
+            console.log('Data sent to server : ' + data);
+            var netdata = data.split('::::');
+            var user = yield frienqModel_1.default.findByToken(netdata[0]);
+            if (user == null)
+                socket.destroy();
+            if (netdata.length != 3) {
+                socket.write('Data::::Invalid Protocol');
+                //socket.flush();
+                return;
+            }
+            if (netdata[2] == "Hello") {
+                var old = findSocketByToken(netdata[0]);
+                if (old == null)
+                    socketlist.push(new socketModel_1.default(netdata[0], socket, user));
+                else {
+                    old.socket = socket;
+                }
+                socket.write('Data::::Hello');
+                //setTimeout(function(){socket.write('Data::::Out Stream');},5000);
+            }
+        });
     });
     socket.on('drain', function () {
         console.log('write buffer is empty now .. u can resume the writable stream');
@@ -83,5 +119,5 @@ netserver.on("connection", function (socket) {
 netserver.on('close', function () {
     console.log('Server closed !');
 });
-exports.default = { server: netserver, socketlist: socketlist };
+exports.default = { server: netserver, socketlist: socketlist, findSocketByToken: findSocketByToken, findSocketByUID: findSocketByUID };
 //# sourceMappingURL=socket.js.map

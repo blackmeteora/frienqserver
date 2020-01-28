@@ -2,8 +2,6 @@ import database from "../core/database";
 import Helper from "../core/helper";
 
 export default class FrienqModel {
-    
-    private model : object;
 
     public static async findByEMail(email:string){
         var result = await database.select(
