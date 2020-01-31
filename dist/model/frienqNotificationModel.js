@@ -37,6 +37,12 @@ class FrienqNotificationModel {
             return result;
         });
     }
+    static setAllNotified(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.executeQuery(["update frienq_notification set notified=1 where uid_owner=? and notified=0"], [[id]]);
+            return result;
+        });
+    }
     static sendNotifications(uid) {
         return __awaiter(this, void 0, void 0, function* () {
             var client = socket_1.default.findSocketByUID(uid);

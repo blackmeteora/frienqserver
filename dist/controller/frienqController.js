@@ -52,6 +52,11 @@ class FrienqController {
             catch (ex) {
                 result.result = false;
                 result.msg = ex.message;
+                if (result.msg.indexOf('Duplicate') > -1) {
+                    result.result = true;
+                    result.data = true;
+                    delete result.msg;
+                }
             }
             res.send(result);
         });
@@ -145,6 +150,20 @@ class FrienqController {
             try {
                 result.result = true;
                 result.data = yield frienqNotificationModel_1.default.getNotifications(req.body.user);
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
+        });
+    }
+    ClearNotifications(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                result.data = yield frienqNotificationModel_1.default.setAllNotified(req.body.user.uid);
             }
             catch (ex) {
                 result.result = false;

@@ -39,6 +39,11 @@ class FrienqController {
         catch(ex){
             result.result=false;
             result.msg=ex.message;
+            if(result.msg.indexOf('Duplicate')>-1){
+                result.result = true;
+                result.data = true;
+                delete result.msg;
+            }
         }
 
         res.send(result);
@@ -133,6 +138,21 @@ class FrienqController {
         try{
             result.result=true;
             result.data = await FrienqNotificationModel.getNotifications(req.body.user);
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
+    }
+
+    public async ClearNotifications(req:any, res:any){
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data = await FrienqNotificationModel.setAllNotified(req.body.user.uid);
         }
         catch(ex){
             result.result=false;

@@ -27,6 +27,11 @@ export default class FrienqNotificationModel {
         return result;
     }
 
+    public static async setAllNotified(id:number){
+        var result = await database.executeQuery(["update frienq_notification set notified=1 where uid_owner=? and notified=0"],[[id]]);
+        return result;
+    }
+
     public static async sendNotifications(uid:String){
         var client = socket.findSocketByUID(uid);
         if(client!=null) {
