@@ -7,6 +7,7 @@ const homeController_1 = __importDefault(require("../controller/homeController")
 const definitionController_1 = __importDefault(require("../controller/definitionController"));
 const authController_1 = __importDefault(require("../controller/authController"));
 const frienqController_1 = __importDefault(require("../controller/frienqController"));
+const postController_1 = __importDefault(require("../controller/postController"));
 const post_auth_register_1 = __importDefault(require("../validator/post_auth_register"));
 const post_auth_login_1 = __importDefault(require("../validator/post_auth_login"));
 var multer = require('multer');
@@ -35,6 +36,7 @@ class Router {
         api.post("/Frienq/FrienqList", frienqController_1.default.FrienqList);
         //End Auth Controller
         //Begin Post Controller
+        api.post("/Post/Create", upload.any(), postController_1.default.Create);
         //End Post Controller
     }
 }

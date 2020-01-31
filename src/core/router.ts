@@ -3,6 +3,7 @@ import HomeController from "../controller/homeController";
 import DefinitionController from "../controller/definitionController";
 import AuthController from "../controller/authController";
 import FrienqController from "../controller/frienqController";
+import PostController from "../controller/postController";
 import v_post_auth_register from "../validator/post_auth_register";
 import v_post_auth_login from "../validator/post_auth_login";
 var multer  = require('multer');
@@ -36,7 +37,7 @@ class Router{
         //End Auth Controller
 
         //Begin Post Controller
-        
+        api.post("/Post/Create",upload.any(), PostController.Create);
         //End Post Controller
     }
 }
