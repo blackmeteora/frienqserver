@@ -42,11 +42,12 @@ class FrienqController {
                 result.result = true;
                 if (req.body.op == 1) {
                     result.data = yield frienqModel_1.default.frienq(req.body.uid_member, req.body.user.uid);
+                    result.data = result.data["affectedRows"] == 1;
                 }
                 else {
                     result.data = yield frienqModel_1.default.unFrienq(req.body.uid_member, req.body.user.uid);
+                    result.data = !(result.data["affectedRows"] == 1);
                 }
-                result.data = result.data["affectedRows"] == 1;
                 frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
             }
             catch (ex) {

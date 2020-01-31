@@ -34,6 +34,10 @@ class Router{
         api.post("/Frienq/FrienqOp", FrienqController.FrienqOp);
         api.post("/Frienq/FrienqList", FrienqController.FrienqList);
         //End Auth Controller
+
+        //Begin Post Controller
+        
+        //End Post Controller
     }
 }
 

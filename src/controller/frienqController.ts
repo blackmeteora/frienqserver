@@ -30,10 +30,11 @@ class FrienqController {
             result.result=true;
             if(req.body.op==1){
                 result.data=await FrienqModel.frienq(req.body.uid_member, req.body.user.uid);
+                result.data = result.data["affectedRows"]==1;
             }else{
                 result.data=await FrienqModel.unFrienq(req.body.uid_member, req.body.user.uid);
+                result.data = ! (result.data["affectedRows"]==1);
             }
-            result.data = result.data["affectedRows"]==1;
             FrienqNotificationModel.sendNotifications(req.body.uid_member);
         }
         catch(ex){
