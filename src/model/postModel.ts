@@ -38,4 +38,37 @@ export default class PostModel {
             throw ex;
         }
     }
+
+    public static async getFeed(user:any, lastPost:string=""){
+        
+        var postResult = await database.select(
+            "select frienq_post.* "+
+            "from frienq_post "+
+            "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member "+
+            "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 "+
+            "order by frienq_post.date_create desc "+
+            "limit 100",[user.uid]);
+        
+        var postList = "";
+        
+        for(var i=0;i<postResult.length;i++){
+           postList=postList+",'"+postResult[i].id+"'"
+           postResult[i].items=new Array<any>();
+           delete postResult[i].deleted;
+        }
+
+        var postItemResult = await database.select(
+            "select frienq_post_item.* from frienq_post_item where deleted=0 and id_post in (''"+postList+")",[]);
+        
+        for(var i=0;i<postResult.length;i++){
+            for(var x=0;x<postItemResult.length;x++){
+                if(postResult[i].id==postItemResult[x].id_post){
+                     delete postItemResult[x].deleted;
+                     postResult[i].items.push(postItemResult[x]);
+                }
+            }
+        }
+
+        return postResult;
+    }
 }

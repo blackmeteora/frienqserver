@@ -36,6 +36,8 @@ class Router {
         api.post("/Frienq/FrienqList", frienqController_1.default.FrienqList);
         //End Auth Controller
         //Begin Post Controller
+        api.get("/Post/Media", postController_1.default.Media);
+        api.post("/Post/Feed", postController_1.default.Feed);
         api.post("/Post/Create", upload.any(), postController_1.default.Create);
         //End Post Controller
     }

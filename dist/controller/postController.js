@@ -95,6 +95,42 @@ class PostController {
             }
         });
     }
+    Media(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (req.headers["QueryString"].u != null && req.headers["QueryString"].p != null && req.headers["QueryString"].f != null) {
+                var file = path_1.default.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
+                var image = fs_1.default.createReadStream(file);
+                image.on('open', function () {
+                    //res.set('Content-Type', "image/jpeg");
+                    image.pipe(res);
+                });
+                image.on('error', function () {
+                    res.set('Content-Type', 'text/plain');
+                    res.status(404).end('404 - Not found');
+                });
+            }
+            else {
+                res.set('Content-Type', 'text/plain');
+                res.status(404).end('404 - Not found');
+            }
+        });
+    }
+    Feed(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            var user = req.body.user;
+            var lastPost = req.body.lastPost;
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.getFeed(user, "");
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
 }
 exports.default = new PostController();
 //# sourceMappingURL=postController.js.map

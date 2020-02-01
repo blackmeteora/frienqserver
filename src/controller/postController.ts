@@ -82,6 +82,42 @@ class PostController{
             res.send(resultModel);
         }
     }
+
+    public async Media(req:any, res:any){
+        if(req.headers["QueryString"].u!=null && req.headers["QueryString"].p!=null && req.headers["QueryString"].f!=null){
+            var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
+            var image = fs.createReadStream(file);
+            image.on('open', function () {
+                //res.set('Content-Type', "image/jpeg");
+                image.pipe(res);
+            });
+            image.on('error', function () {
+                res.set('Content-Type', 'text/plain');
+                res.status(404).end('404 - Not found');
+            });
+        }else{
+            res.set('Content-Type', 'text/plain');
+            res.status(404).end('404 - Not found');
+        }
+    }
+
+    public async Feed(req:any, res:any){
+        var resultModel =  new ResultModel();
+        
+        var user = req.body.user;
+        var lastPost = req.body.lastPost;
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.getFeed(user,"");
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
 }
 
 export default new PostController();
