@@ -41,14 +41,14 @@ class PostModel {
             }
         });
     }
-    static getFeed(user, lastPost = "") {
+    static GetFeed(user, lastPost = "") {
         return __awaiter(this, void 0, void 0, function* () {
-            var postResult = yield database_1.default.select("select frienq_post.* " +
+            var postResult = yield database_1.default.select("select distinct frienq_post.* " +
                 "from frienq_post " +
-                "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member " +
+                "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
                 "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 " +
                 "order by frienq_post.date_create desc " +
-                "limit 100", [user.uid]);
+                "limit 100", [user.uid, user.uid]);
             var postList = "";
             for (var i = 0; i < postResult.length; i++) {
                 postList = postList + ",'" + postResult[i].id + "'";
@@ -65,6 +65,17 @@ class PostModel {
                 }
             }
             return postResult;
+        });
+    }
+    static RatePost(userfrom, userto, postid, rate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var rateResult = yield database_1.default.executeQuery(["IF (select count(*) from frienq_rate where id_object=? and uid_member_from=? and uid_member_to=?)=0 then " +
+                    "insert into frienq_rate (id_object,id_type,uid_member_from,uid_member_to,rate,notified,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?); " +
+                    "else " +
+                    "update frienq_rate set rate=?,deleted=? where id_object=? and uid_member_from=? and uid_member_to=?; " +
+                    "end if;"], [[postid, userfrom, userto, postid, 0, userfrom, userto, rate, 0, rate == 0 ? 1 : 0, new Date(), new Date(), new Date(), rate, rate == 0 ? 1 : 0, postid, userfrom, userto]]);
+            var postResult = yield database_1.default.select("select rate,count_rate from frienq_post where id=?", [postid]);
+            return postResult[0];
         });
     }
 }

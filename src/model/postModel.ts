@@ -39,15 +39,15 @@ export default class PostModel {
         }
     }
 
-    public static async getFeed(user:any, lastPost:string=""){
+    public static async GetFeed(user:any, lastPost:string=""){
         
         var postResult = await database.select(
-            "select frienq_post.* "+
+            "select distinct frienq_post.* "+
             "from frienq_post "+
-            "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member "+
+            "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? "+
             "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 "+
             "order by frienq_post.date_create desc "+
-            "limit 100",[user.uid]);
+            "limit 100",[user.uid,user.uid]);
         
         var postList = "";
         
@@ -70,5 +70,19 @@ export default class PostModel {
         }
 
         return postResult;
+    }
+
+    public static async RatePost(userfrom:any, userto:any, postid:string, rate:number){
+        
+        var rateResult = await database.executeQuery(["IF (select count(*) from frienq_rate where id_object=? and uid_member_from=? and uid_member_to=?)=0 then "+
+        "insert into frienq_rate (id_object,id_type,uid_member_from,uid_member_to,rate,notified,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?); "+
+        "else "+
+        "update frienq_rate set rate=?,deleted=? where id_object=? and uid_member_from=? and uid_member_to=?; "+
+        "end if;"],
+        [[postid,userfrom,userto,postid,0,userfrom,userto,rate,0,rate==0 ? 1 : 0,new Date(),new Date(),new Date(),rate,rate==0 ? 1 : 0,postid,userfrom,userto]]);
+
+        var postResult = await database.select("select rate,count_rate from frienq_post where id=?",[postid]);
+
+        return postResult[0];
     }
 }

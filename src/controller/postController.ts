@@ -109,7 +109,22 @@ class PostController{
 
         try{
             resultModel.result=true;
-            resultModel.data = await PostModel.getFeed(user,"");
+            resultModel.data = await PostModel.GetFeed(user,"");
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
+    public async RatePost(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.RatePost(req.body.user.uid,req.body.uid_member,req.body.id_post,req.body.rate);
         }
         catch(ex){
             resultModel.result=false;

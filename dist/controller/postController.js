@@ -122,7 +122,21 @@ class PostController {
             var lastPost = req.body.lastPost;
             try {
                 resultModel.result = true;
-                resultModel.data = yield postModel_1.default.getFeed(user, "");
+                resultModel.data = yield postModel_1.default.GetFeed(user, "");
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
+    RatePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.RatePost(req.body.user.uid, req.body.uid_member, req.body.id_post, req.body.rate);
             }
             catch (ex) {
                 resultModel.result = false;
