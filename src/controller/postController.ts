@@ -3,6 +3,7 @@ import PostItemModel from "../model/postItemModel";
 import path from 'path';
 import fs from 'fs';
 import PostModel from "../model/postModel";
+import FrienqNotificationModel from "../model/frienqNotificationModel";
 class PostController{
     public async Create(req:any, res:any){
         var resultModel =  new ResultModel();
@@ -125,6 +126,7 @@ class PostController{
         try{
             resultModel.result=true;
             resultModel.data = await PostModel.RatePost(req.body.user.uid,req.body.uid_member,req.body.id_post,req.body.rate);
+            FrienqNotificationModel.sendNotifications(req.body.uid_member);
         }
         catch(ex){
             resultModel.result=false;

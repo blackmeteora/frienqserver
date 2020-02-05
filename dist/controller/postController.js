@@ -17,6 +17,7 @@ const postItemModel_1 = __importDefault(require("../model/postItemModel"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const postModel_1 = __importDefault(require("../model/postModel"));
+const frienqNotificationModel_1 = __importDefault(require("../model/frienqNotificationModel"));
 class PostController {
     Create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -137,6 +138,7 @@ class PostController {
             try {
                 resultModel.result = true;
                 resultModel.data = yield postModel_1.default.RatePost(req.body.user.uid, req.body.uid_member, req.body.id_post, req.body.rate);
+                frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
             }
             catch (ex) {
                 resultModel.result = false;
