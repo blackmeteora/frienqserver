@@ -1,5 +1,6 @@
 import database from "../core/database";
 import socket from '../socket';
+import PostModel from "./postModel";
 
 export default class FrienqNotificationModel {
 
@@ -14,8 +15,9 @@ export default class FrienqNotificationModel {
             "limit 100",[user.uid]);
         
         if(result.length>0){
-            result.forEach((element: any) => {
+            result.forEach(async (element: any) => {
                 element.frienq = JSON.parse(element.frienq);
+                if(element.notification_type==1) element.post = await PostModel.GetPost(user,element.notification_data);
             });
         }
 

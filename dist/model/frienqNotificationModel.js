@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
 const socket_1 = __importDefault(require("../socket"));
+const postModel_1 = __importDefault(require("./postModel"));
 class FrienqNotificationModel {
     static getNotifications(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -24,9 +25,11 @@ class FrienqNotificationModel {
                 "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? " +
                 "limit 100", [user.uid]);
             if (result.length > 0) {
-                result.forEach((element) => {
+                result.forEach((element) => __awaiter(this, void 0, void 0, function* () {
                     element.frienq = JSON.parse(element.frienq);
-                });
+                    if (element.notification_type == 1)
+                        element.post = yield postModel_1.default.GetPost(user, element.notification_data);
+                }));
             }
             return result;
         });
