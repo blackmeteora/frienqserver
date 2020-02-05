@@ -43,12 +43,13 @@ class PostModel {
     }
     static GetFeed(user, lastPost = "") {
         return __awaiter(this, void 0, void 0, function* () {
-            var postResult = yield database_1.default.select("select distinct frienq_post.* " +
+            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate " +
                 "from frienq_post " +
                 "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
+                "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?" +
                 "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 " +
                 "order by frienq_post.date_create desc " +
-                "limit 100", [user.uid, user.uid]);
+                "limit 100", [user.uid, user.uid, user.uid]);
             var postList = "";
             for (var i = 0; i < postResult.length; i++) {
                 postList = postList + ",'" + postResult[i].id + "'";
