@@ -65,7 +65,7 @@ class PostModel {
                     }
                 }
             }
-            return postResult;
+            return postResult[0];
         });
     }
     static GetFeed(user, lastPost = "") {

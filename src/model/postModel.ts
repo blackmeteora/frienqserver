@@ -70,7 +70,7 @@ export default class PostModel {
             }
         }
 
-        return postResult;
+        return postResult[0];
     }
 
     public static async GetFeed(user:any, lastPost:string=""){
