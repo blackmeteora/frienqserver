@@ -47,7 +47,7 @@ class PostModel {
                 "from frienq_post " +
                 "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
                 "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?" +
-                "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 and frienq_post.id_post=? " +
+                "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 and frienq_post.id=? " +
                 "order by frienq_post.date_create desc " +
                 "limit 100", [user.uid, user.uid, user.uid, id_post]);
             var postList = "";
