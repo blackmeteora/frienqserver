@@ -25,11 +25,12 @@ class FrienqNotificationModel {
                 "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? " +
                 "limit 100", [user.uid]);
             if (result.length > 0) {
-                result.forEach((element) => __awaiter(this, void 0, void 0, function* () {
-                    element.frienq = JSON.parse(element.frienq);
-                    if (element.notification_type == 1)
-                        element.post = yield postModel_1.default.GetPost(user, element.notification_data);
-                }));
+                for (var i = 0; i < result.length; i++) {
+                    result[i].frienq = JSON.parse(result[i].frienq);
+                    if (result[i].notification_type == 1) {
+                        result[i].post = yield postModel_1.default.GetPost(user, result[i].notification_data);
+                    }
+                }
             }
             return result;
         });

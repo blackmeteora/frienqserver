@@ -15,10 +15,12 @@ export default class FrienqNotificationModel {
             "limit 100",[user.uid]);
         
         if(result.length>0){
-            result.forEach(async (element: any) => {
-                element.frienq = JSON.parse(element.frienq);
-                if(element.notification_type==1) element.post = await PostModel.GetPost(user,element.notification_data);
-            });
+            for(var i=0;i<result.length;i++){
+                result[i].frienq = JSON.parse(result[i].frienq);
+                if(result[i].notification_type==1){
+                    result[i].post = await PostModel.GetPost(user,result[i].notification_data);
+                } 
+            }
         }
 
         return result;
