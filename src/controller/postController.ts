@@ -120,6 +120,24 @@ class PostController{
         res.send(resultModel);
     }
 
+    public async GetPost(req:any, res:any){
+        var resultModel =  new ResultModel();
+        
+        var user = req.body.user;
+        var lastPost = req.body.lastPost;
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.GetPost(user,req.body.id_post);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
     public async RatePost(req:any, res:any){
         var resultModel =  new ResultModel();
 

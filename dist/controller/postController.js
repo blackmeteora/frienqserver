@@ -132,6 +132,22 @@ class PostController {
             res.send(resultModel);
         });
     }
+    GetPost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            var user = req.body.user;
+            var lastPost = req.body.lastPost;
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.GetPost(user, req.body.id_post);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
     RatePost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var resultModel = new resultModel_1.default();

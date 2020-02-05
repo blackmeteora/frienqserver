@@ -38,6 +38,7 @@ class Router {
         //Begin Post Controller
         api.get("/Post/Media", postController_1.default.Media);
         api.post("/Post/Feed", postController_1.default.Feed);
+        api.post("/Post/GetPost", postController_1.default.GetPost);
         api.post("/Post/RatePost", postController_1.default.RatePost);
         api.post("/Post/Create", upload.any(), postController_1.default.Create);
         //End Post Controller

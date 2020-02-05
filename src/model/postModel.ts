@@ -39,6 +39,40 @@ export default class PostModel {
         }
     }
 
+    public static async GetPost(user:any, id_post:string){
+        
+        var postResult = await database.select(
+            "select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate "+
+            "from frienq_post "+
+            "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? "+
+            "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?"+
+            "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 and frienq_post.id_post=? "+
+            "order by frienq_post.date_create desc "+
+            "limit 100",[user.uid,user.uid,user.uid,id_post]);
+        
+        var postList = "";
+        
+        for(var i=0;i<postResult.length;i++){
+           postList=postList+",'"+postResult[i].id+"'"
+           postResult[i].items=new Array<any>();
+           delete postResult[i].deleted;
+        }
+
+        var postItemResult = await database.select(
+            "select frienq_post_item.* from frienq_post_item where deleted=0 and id_post in (''"+postList+")",[]);
+        
+        for(var i=0;i<postResult.length;i++){
+            for(var x=0;x<postItemResult.length;x++){
+                if(postResult[i].id==postItemResult[x].id_post){
+                     delete postItemResult[x].deleted;
+                     postResult[i].items.push(postItemResult[x]);
+                }
+            }
+        }
+
+        return postResult;
+    }
+
     public static async GetFeed(user:any, lastPost:string=""){
         
         var postResult = await database.select(
