@@ -123,7 +123,7 @@ class PostController {
             var lastPost = req.body.lastPost;
             try {
                 resultModel.result = true;
-                resultModel.data = yield postModel_1.default.GetFeed(user, req.body.own, "");
+                resultModel.data = yield postModel_1.default.GetFeed(user, req.body.uid_member, "");
             }
             catch (ex) {
                 resultModel.result = false;

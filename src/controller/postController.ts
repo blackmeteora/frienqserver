@@ -110,7 +110,7 @@ class PostController{
 
         try{
             resultModel.result=true;
-            resultModel.data = await PostModel.GetFeed(user,req.body.own, "");
+            resultModel.data = await PostModel.GetFeed(user,req.body.uid_member, "");
         }
         catch(ex){
             resultModel.result=false;
