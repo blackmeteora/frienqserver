@@ -163,6 +163,20 @@ class PostController {
             res.send(resultModel);
         });
     }
+    RateList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.RateList(req.body.id_post);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
     DeletePost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var resultModel = new resultModel_1.default();

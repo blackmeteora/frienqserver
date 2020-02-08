@@ -154,6 +154,21 @@ class PostController{
         res.send(resultModel);
     }
 
+    public async RateList(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.RateList(req.body.id_post);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
     public async DeletePost(req:any, res:any){
         var resultModel =  new ResultModel();
 

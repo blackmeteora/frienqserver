@@ -120,10 +120,27 @@ export default class PostModel {
 
         return postResult[0];
     }
+
+    public static async RateList(postid:string){
+        
+        var result = await database.select(
+            "select frienq_rate.rate, frienq_rate.date_create, "+
+            "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq "+
+            "from frienq_rate "+
+            "inner join frienq_member on frienq_member.uid=frienq_rate.uid_member_from "+
+            "where frienq_rate.deleted=0 and frienq_rate.id_object=? ",[postid]);
+
+            if(result.length>0){
+                for(var i=0;i<result.length;i++) result[i].frienq = JSON.parse(result[i].frienq);
+            }
+
+            return result;
+    }
+
     public static async DeletePost(user:any, postid:string){
         
-        var result = await database.executeQuery(["update frienq_post set deleted=1 where id=? and uid_member=?"],
-        [[postid, user.uid]]);
+        var result = await database.executeQuery(["update frienq_post set deleted=1, date_delete=? where id=? and uid_member=?"],
+        [[new Date(), postid, user.uid]]);
 
         let res:any = result[0];
 

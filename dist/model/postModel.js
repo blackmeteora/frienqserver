@@ -106,9 +106,23 @@ class PostModel {
             return postResult[0];
         });
     }
+    static RateList(postid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_rate.rate, frienq_rate.date_create, " +
+                "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq " +
+                "from frienq_rate " +
+                "inner join frienq_member on frienq_member.uid=frienq_rate.uid_member_from " +
+                "where frienq_rate.deleted=0 and frienq_rate.id_object=? ", [postid]);
+            if (result.length > 0) {
+                for (var i = 0; i < result.length; i++)
+                    result[i].frienq = JSON.parse(result[i].frienq);
+            }
+            return result;
+        });
+    }
     static DeletePost(user, postid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.executeQuery(["update frienq_post set deleted=1 where id=? and uid_member=?"], [[postid, user.uid]]);
+            var result = yield database_1.default.executeQuery(["update frienq_post set deleted=1, date_delete=? where id=? and uid_member=?"], [[new Date(), postid, user.uid]]);
             let res = result[0];
             return res["affectedRows"] == 1;
         });

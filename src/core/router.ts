@@ -41,6 +41,7 @@ class Router{
         api.post("/Post/Feed", PostController.Feed);
         api.post("/Post/GetPost", PostController.GetPost);
         api.post("/Post/RatePost", PostController.RatePost);
+        api.post("/Post/RateList", PostController.RateList);
         api.post("/Post/DeletePost", PostController.DeletePost);
         api.post("/Post/Create",upload.any(), PostController.Create);
         //End Post Controller
