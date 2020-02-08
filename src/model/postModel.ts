@@ -120,4 +120,13 @@ export default class PostModel {
 
         return postResult[0];
     }
+    public static async DeletePost(user:any, postid:string){
+        
+        var result = await database.executeQuery(["update frienq_post set deleted=1 where id=? and uid_member=?"],
+        [[postid, user.uid]]);
+
+        let res:any = result[0];
+
+        return res["affectedRows"] == 1;
+    }
 }

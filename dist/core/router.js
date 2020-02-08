@@ -40,6 +40,7 @@ class Router {
         api.post("/Post/Feed", postController_1.default.Feed);
         api.post("/Post/GetPost", postController_1.default.GetPost);
         api.post("/Post/RatePost", postController_1.default.RatePost);
+        api.post("/Post/DeletePost", postController_1.default.DeletePost);
         api.post("/Post/Create", upload.any(), postController_1.default.Create);
         //End Post Controller
     }

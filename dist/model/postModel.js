@@ -106,6 +106,13 @@ class PostModel {
             return postResult[0];
         });
     }
+    static DeletePost(user, postid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.executeQuery(["update frienq_post set deleted=1 where id=? and uid_member=?"], [[postid, user.uid]]);
+            let res = result[0];
+            return res["affectedRows"] == 1;
+        });
+    }
 }
 exports.default = PostModel;
 //# sourceMappingURL=postModel.js.map
