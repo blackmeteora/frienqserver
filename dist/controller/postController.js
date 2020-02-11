@@ -191,6 +191,77 @@ class PostController {
             res.send(resultModel);
         });
     }
+    AddComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.AddComment(req.body.user, req.body.uid_member, req.body.id_post, req.body.comment);
+                frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
+    UpdateComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.UpdateComment(req.body.user, req.body.id_comment, req.body.comment);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
+    DeleteComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.DeleteComment(req.body.user, req.body.id_comment);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
+    CommentList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.GetCommentList(req.body.id_post);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
+    CommentHistoryList(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.GetCommentHistoryList(req.body.id_comment);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
 }
 exports.default = new PostController();
 //# sourceMappingURL=postController.js.map

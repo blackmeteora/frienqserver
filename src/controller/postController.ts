@@ -183,6 +183,82 @@ class PostController{
 
         res.send(resultModel);
     }
+
+    public async AddComment(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result = true;
+            resultModel.data = await PostModel.AddComment(req.body.user, req.body.uid_member, req.body.id_post, req.body.comment);
+            FrienqNotificationModel.sendNotifications(req.body.uid_member);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
+    public async UpdateComment(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result = true;
+            resultModel.data = await PostModel.UpdateComment(req.body.user, req.body.id_comment, req.body.comment);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
+    public async DeleteComment(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result = true;
+            resultModel.data = await PostModel.DeleteComment(req.body.user, req.body.id_comment);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
+    public async CommentList(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.GetCommentList(req.body.id_post);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
+    public async CommentHistoryList(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.GetCommentHistoryList(req.body.id_comment);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
 }
 
 export default new PostController();

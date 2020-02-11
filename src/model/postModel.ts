@@ -150,4 +150,70 @@ export default class PostModel {
 
         return res["affectedRows"] == 1;
     }
+
+    public static async AddComment(user:any, uid_member:string, id_post:any, comment:string){
+        
+        var uuid = require("uuid/v4");
+        var now = new Date();
+        var result = await database.executeQuery(["insert into frienq_post_comment (id, id_post, uid_member_from, uid_member_to, comment, rate, rate_count, notified, deleted, date_create, date_update, date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?)"],
+        [[uuid(), id_post, user.uid, uid_member, comment, 0, 0, 0, 0, now, now, now]]);
+
+        let res:any = result[0];
+
+       
+       
+        return res["affectedRows"] == 1;
+    }
+
+    public static async UpdateComment(user:any, id_comment:string, comment:string){
+        
+        var uuid = require("uuid/v4");
+        var now = new Date();
+        var result = await database.executeQuery([
+            "insert into frienq_post_comment_history select * from frienq_post_comment where id=? and uid_member_from=?",
+            "update frienq_post_comment set comment=?, date_update=? where id=? and uid_member_from=?"],
+        [[id_comment, user.uid],[comment, now, id_comment, user.uid]]);
+
+        let res:any = result[1];
+
+        return res["affectedRows"] == 1;
+    }
+
+    public static async DeleteComment(user:any, id_comment:string){
+        
+        var uuid = require("uuid/v4");
+        var now = new Date();
+        var result = await database.executeQuery([
+            "update frienq_post_comment set deleted=1, date_delete=? where id=? and uid_member_from=?"],
+        [[now, id_comment, user.uid]]);
+
+        let res:any = result[0];
+
+        return res["affectedRows"] == 1;
+    }
+
+    public static async GetCommentList(postid:string){
+        
+        var result = await database.select(
+            "select frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update, "+
+            "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq "+
+            "from frienq_post_comment "+
+            "inner join frienq_member on frienq_member.uid=frienq_post_comment.uid_member_from "+
+            "where frienq_post_comment.deleted=0 and frienq_post_comment.id_post=? "+
+            "order by frienq_post_comment.date_create",[postid]);
+
+            if(result.length>0){
+                for(var i=0;i<result.length;i++) result[i].frienq = JSON.parse(result[i].frienq);
+            }
+
+            return result;
+    }
+
+    public static async GetCommentHistoryList(id_comment:string){
+        
+        var result = await database.select(
+            "select frienq_post_comment_history.comment, frienq_post_comment_history.date_create, frienq_post_comment_history.date_update from frienq_post_comment_history where id=? order by frienq_post_comment_history.date_update",[id_comment]);
+
+            return result;
+    }
 }

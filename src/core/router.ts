@@ -44,6 +44,11 @@ class Router{
         api.post("/Post/RateList", PostController.RateList);
         api.post("/Post/DeletePost", PostController.DeletePost);
         api.post("/Post/Create",upload.any(), PostController.Create);
+        api.post("/Post/AddComment", PostController.AddComment);
+        api.post("/Post/UpdateComment", PostController.UpdateComment);
+        api.post("/Post/DeleteComment", PostController.DeleteComment);
+        api.post("/Post/CommentList", PostController.CommentList);
+        api.post("/Post/CommentHistoryList", PostController.CommentHistoryList);
         //End Post Controller
     }
 }
