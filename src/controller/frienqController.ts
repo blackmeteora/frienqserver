@@ -138,7 +138,7 @@ class FrienqController {
 
         try{
             result.result=true;
-            result.data = await FrienqNotificationModel.getNotifications(req.body.user);
+            result.data = await FrienqNotificationModel.getNotifications(req.body.user, req.headers.QueryString.id_last==null? 0 : req.headers.QueryString.id_last);
         }
         catch(ex){
             result.result=false;

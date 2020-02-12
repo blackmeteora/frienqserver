@@ -150,7 +150,7 @@ class FrienqController {
             var result = new resultModel_1.default();
             try {
                 result.result = true;
-                result.data = yield frienqNotificationModel_1.default.getNotifications(req.body.user);
+                result.data = yield frienqNotificationModel_1.default.getNotifications(req.body.user, req.headers.QueryString.id_last == null ? 0 : req.headers.QueryString.id_last);
             }
             catch (ex) {
                 result.result = false;

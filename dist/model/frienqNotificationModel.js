@@ -16,19 +16,22 @@ const database_1 = __importDefault(require("../core/database"));
 const socket_1 = __importDefault(require("../socket"));
 const postModel_1 = __importDefault(require("./postModel"));
 class FrienqNotificationModel {
-    static getNotifications(user) {
+    static getNotifications(user, id_last) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.select("select frienq_notification.*, " +
                 "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq " +
                 "from frienq_notification " +
                 "inner join frienq_member on frienq_member.uid=frienq_notification.uid_frienq " +
-                "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? " +
-                "limit 100", [user.uid]);
+                "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? and frienq_notification.id>? " +
+                "limit 15", [user.uid, id_last]);
             if (result.length > 0) {
                 for (var i = 0; i < result.length; i++) {
                     result[i].frienq = JSON.parse(result[i].frienq);
-                    if (result[i].notification_type == 1) {
+                    if (result[i].notification_type == 1 || result[i].notification_type == 3) {
                         result[i].post = yield postModel_1.default.GetPost(user, result[i].notification_data);
+                    }
+                    if (result[i].notification_type == 3) {
+                        result[i].comment = yield postModel_1.default.GetComment(result[i].notification_data2);
                     }
                 }
             }
@@ -51,7 +54,7 @@ class FrienqNotificationModel {
         return __awaiter(this, void 0, void 0, function* () {
             var client = socket_1.default.findSocketByUID(uid);
             if (client != null) {
-                var result = yield FrienqNotificationModel.getNotifications(client.user);
+                var result = yield FrienqNotificationModel.getNotifications(client.user, 0);
                 client.socket.write('Notification::::' + JSON.stringify(result));
             }
         });

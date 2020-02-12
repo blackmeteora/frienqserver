@@ -14,7 +14,7 @@ class Events {
         this.Event.on(Events.SendNotification, function (data) {
             var client = socket_1.default.findSocketByUID(data);
             if (client != null) {
-                var result = frienqNotificationModel_1.default.getNotifications(client.user);
+                var result = frienqNotificationModel_1.default.getNotifications(client.user, 0);
                 client.socket.write('Notification::::' + JSON.stringify(result));
             }
         });

@@ -4,21 +4,25 @@ import PostModel from "./postModel";
 
 export default class FrienqNotificationModel {
 
-    public static async getNotifications(user:any){
+    public static async getNotifications(user:any,id_last:number){
         
         var result = await database.select(
             "select frienq_notification.*, "+
             "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq "+
             "from frienq_notification "+
             "inner join frienq_member on frienq_member.uid=frienq_notification.uid_frienq "+
-            "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? "+
-            "limit 100",[user.uid]);
+            "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? and frienq_notification.id>? "+
+            "limit 15",[user.uid,id_last]);
         
         if(result.length>0){
             for(var i=0;i<result.length;i++){
                 result[i].frienq = JSON.parse(result[i].frienq);
-                if(result[i].notification_type==1){
+                if(result[i].notification_type==1 || result[i].notification_type==3){
                     result[i].post = await PostModel.GetPost(user,result[i].notification_data);
+                } 
+
+                if(result[i].notification_type==3){
+                    result[i].comment = await PostModel.GetComment(result[i].notification_data2);
                 } 
             }
         }
@@ -39,7 +43,7 @@ export default class FrienqNotificationModel {
     public static async sendNotifications(uid:String){
         var client = socket.findSocketByUID(uid);
         if(client!=null) {
-            var result = await FrienqNotificationModel.getNotifications(client.user);
+            var result = await FrienqNotificationModel.getNotifications(client.user, 0);
             client.socket.write('Notification::::'+JSON.stringify(result));
         }
     }

@@ -164,7 +164,7 @@ class PostModel {
     }
     static GetCommentList(postid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update, " +
+            var result = yield database_1.default.select("select frienq_post_comment.id, frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update, " +
                 "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq " +
                 "from frienq_post_comment " +
                 "inner join frienq_member on frienq_member.uid=frienq_post_comment.uid_member_from " +
@@ -177,9 +177,17 @@ class PostModel {
             return result;
         });
     }
+    static GetComment(id_comment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_post_comment.id, frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update " +
+                "from frienq_post_comment " +
+                "where frienq_post_comment.deleted=0 and frienq_post_comment.id=? ", [id_comment]);
+            return result;
+        });
+    }
     static GetCommentHistoryList(id_comment) {
         return __awaiter(this, void 0, void 0, function* () {
-            var result = yield database_1.default.select("select frienq_post_comment_history.comment, frienq_post_comment_history.date_create, frienq_post_comment_history.date_update from frienq_post_comment_history where id=? order by frienq_post_comment_history.date_update", [id_comment]);
+            var result = yield database_1.default.select("select frienq_post_comment_history.id, frienq_post_comment_history.comment, frienq_post_comment_history.date_create, frienq_post_comment_history.date_update from frienq_post_comment_history where id=? order by frienq_post_comment_history.date_update", [id_comment]);
             return result;
         });
     }

@@ -195,7 +195,7 @@ export default class PostModel {
     public static async GetCommentList(postid:string){
         
         var result = await database.select(
-            "select frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update, "+
+            "select frienq_post_comment.id, frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update, "+
             "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq "+
             "from frienq_post_comment "+
             "inner join frienq_member on frienq_member.uid=frienq_post_comment.uid_member_from "+
@@ -209,10 +209,20 @@ export default class PostModel {
             return result;
     }
 
+    public static async GetComment(id_comment:string){
+        
+        var result = await database.select(
+            "select frienq_post_comment.id, frienq_post_comment.comment, frienq_post_comment.date_create, frienq_post_comment.date_update "+
+            "from frienq_post_comment "+
+            "where frienq_post_comment.deleted=0 and frienq_post_comment.id=? ",[id_comment]);
+            
+            return result;
+    }
+
     public static async GetCommentHistoryList(id_comment:string){
         
         var result = await database.select(
-            "select frienq_post_comment_history.comment, frienq_post_comment_history.date_create, frienq_post_comment_history.date_update from frienq_post_comment_history where id=? order by frienq_post_comment_history.date_update",[id_comment]);
+            "select frienq_post_comment_history.id, frienq_post_comment_history.comment, frienq_post_comment_history.date_create, frienq_post_comment_history.date_update from frienq_post_comment_history where id=? order by frienq_post_comment_history.date_update",[id_comment]);
 
             return result;
     }
