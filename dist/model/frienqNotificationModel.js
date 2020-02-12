@@ -38,6 +38,14 @@ class FrienqNotificationModel {
             return result;
         });
     }
+    static getNotificationCount(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select count(*) as count " +
+                "from frienq_notification " +
+                "where frienq_notification.deleted=0 and frienq_notification.notified=0 and frienq_notification.uid_owner=? ", [user.uid]);
+            return result[0].count;
+        });
+    }
     static setNotified(id) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = yield database_1.default.executeQuery(["update frienq_notification set notified=1 where id=?"], [[id]]);

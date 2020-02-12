@@ -30,6 +30,16 @@ export default class FrienqNotificationModel {
         return result;
     }
 
+    public static async getNotificationCount(user:any){
+        
+        var result = await database.select(
+            "select count(*) as count "+
+            "from frienq_notification "+
+            "where frienq_notification.deleted=0 and frienq_notification.notified=0 and frienq_notification.uid_owner=? ",[user.uid]);
+
+        return result[0].count;
+    }
+
     public static async setNotified(id:number){
         var result = await database.executeQuery(["update frienq_notification set notified=1 where id=?"],[[id]]);
         return result;

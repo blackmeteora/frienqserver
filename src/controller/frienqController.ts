@@ -148,6 +148,21 @@ class FrienqController {
         res.send(result);
     }
 
+    public async NotificationCount(req:any, res:any){
+        var result =  new ResultModel();
+
+        try{
+            result.result=true;
+            result.data = await FrienqNotificationModel.getNotificationCount(req.body.user);
+        }
+        catch(ex){
+            result.result=false;
+            result.msg=ex.message;
+        }
+
+        res.send(result);
+    }
+
     public async ClearNotifications(req:any, res:any){
         var result =  new ResultModel();
 

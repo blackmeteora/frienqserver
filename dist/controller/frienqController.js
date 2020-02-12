@@ -159,6 +159,20 @@ class FrienqController {
             res.send(result);
         });
     }
+    NotificationCount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = new resultModel_1.default();
+            try {
+                result.result = true;
+                result.data = yield frienqNotificationModel_1.default.getNotificationCount(req.body.user);
+            }
+            catch (ex) {
+                result.result = false;
+                result.msg = ex.message;
+            }
+            res.send(result);
+        });
+    }
     ClearNotifications(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var result = new resultModel_1.default();
