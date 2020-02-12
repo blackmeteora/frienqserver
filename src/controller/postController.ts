@@ -32,7 +32,7 @@ class PostController{
                 var targetFile=path.resolve(`./data/user/${user.uid}/post/${post.id}/${imageName}${fileExtension}`);
                 var targetPath=path.resolve(`./data/user/${user.uid}/post/${post.id}/`);
 
-                if(fileExtension==='.png' || fileExtension==='.jpg' || fileExtension==='.jpeg' || fileExtension==='.gif') {
+                if(fileExtension==='.png' || fileExtension==='.jpg' || fileExtension==='.jpeg' || fileExtension==='.gif' || fileExtension==='.mp4' || fileExtension==='.mov') {
                     
                     if(fs.existsSync(targetPath)) fs.rmdirSync(targetPath, { recursive: true });
                     
@@ -69,7 +69,7 @@ class PostController{
                 }
             }
             
-            if(resultModel.result=true){
+            if(resultModel.result==true){
                 resultModel.data = await post.Save();
                 res.send(resultModel);
             }else{

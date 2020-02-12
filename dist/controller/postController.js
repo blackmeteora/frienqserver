@@ -42,7 +42,7 @@ class PostController {
                     var imageName = uuid();
                     var targetFile = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/${imageName}${fileExtension}`);
                     var targetPath = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/`);
-                    if (fileExtension === '.png' || fileExtension === '.jpg' || fileExtension === '.jpeg' || fileExtension === '.gif') {
+                    if (fileExtension === '.png' || fileExtension === '.jpg' || fileExtension === '.jpeg' || fileExtension === '.gif' || fileExtension === '.mp4' || fileExtension === '.mov') {
                         if (fs_1.default.existsSync(targetPath))
                             fs_1.default.rmdirSync(targetPath, { recursive: true });
                         fs_1.default.mkdirSync(targetPath, { recursive: true });
@@ -80,7 +80,7 @@ class PostController {
                         });
                     }
                 }
-                if (resultModel.result = true) {
+                if (resultModel.result == true) {
                     resultModel.data = yield post.Save();
                     res.send(resultModel);
                 }
