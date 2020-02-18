@@ -24,6 +24,7 @@ class DB {
             Conn.rollback();
             Conn.release();
             throw ex;
+            
         }
     }
 
