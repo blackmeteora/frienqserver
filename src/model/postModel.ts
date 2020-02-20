@@ -9,9 +9,10 @@ export default class PostModel {
     public location:string;
     public lat:number;
     public lan:number;
-    public explanation:string;
+    public explanation:string="";
     public count_rate:number=0;
     public count_commet:number=0;
+    public order_no:number=0;
     public deleted:boolean=false;
     public date_create:Date=new Date();
     public date_update:Date=new Date();
@@ -26,8 +27,8 @@ export default class PostModel {
         parameters.push([this.id,this.uid_member,this.id_type,this.id_def_security_level,this.location,this.lat,this.lan,this.explanation,this.count_rate,this.count_commet,this.deleted,this.date_create,this.date_update,this.date_delete]);
 
         for(var i=0;i<this.items.length;i++){
-            queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?)");
-            parameters.push([this.items[i].id,this.items[i].id_post,this.items[i].id_type,this.items[i].link,'',this.items[i].rate,this.items[i].count_rate,this.items[i].deleted,this.items[i].date_create,this.items[i].date_update,this.items[i].date_delete]);
+            queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,order_no,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?)");
+            parameters.push([this.items[i].id,this.items[i].id_post,this.items[i].id_type,this.items[i].link,this.items[i].explanation,this.items[i].rate,this.items[i].count_rate,this.items[i].order_no,this.items[i].deleted,this.items[i].date_create,this.items[i].date_update,this.items[i].date_delete]);
         }
 
         try{
@@ -59,7 +60,7 @@ export default class PostModel {
         }
 
         var postItemResult = await database.select(
-            "select frienq_post_item.* from frienq_post_item where deleted=0 and id_post in (''"+postList+")",[]);
+            "select frienq_post_item.* from frienq_post_item where deleted=0 and id_post in (''"+postList+") order by order_no",[]);
         
         for(var i=0;i<postResult.length;i++){
             for(var x=0;x<postItemResult.length;x++){

@@ -80,6 +80,24 @@ class PostController {
                         });
                     }
                 }
+                if (req.body.items != null && req.body.items.length > 0) {
+                    for (var i = 0; i < req.body.items.length; i++) {
+                        var postItem = new postItemModel_1.default();
+                        postItem.id = uuid();
+                        postItem.id_post = post.id;
+                        postItem.id_type = 0;
+                        postItem.link = `${imageName}${fileExtension}`;
+                        postItem.rate = 0;
+                        postItem.count_rate = 0;
+                        postItem.deleted = false;
+                        postItem.explanation = req.body.items[i].explanation;
+                        postItem.order_no = req.body.items[i].order_no;
+                        postItem.date_create = new Date();
+                        postItem.date_update = new Date();
+                        postItem.date_delete = new Date();
+                        post.items.push(postItem);
+                    }
+                }
                 if (resultModel.result == true) {
                     resultModel.data = yield post.Save();
                     res.send(resultModel);

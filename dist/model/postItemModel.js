@@ -4,6 +4,7 @@ class PostItemModel {
     constructor() {
         this.rate = 0;
         this.count_rate = 0;
+        this.order_no = 0;
         this.deleted = false;
         this.date_create = new Date();
         this.date_update = new Date();
