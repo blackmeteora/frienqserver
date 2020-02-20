@@ -36,7 +36,7 @@ class PostController {
                 post.location = req.body.location;
                 post.explanation = req.body.explanation;
                 post.items = new Array();
-                for (var i = 0; i < req.files.length; i++) {
+                for (var i = 0; req.files != null && i < req.files.length; i++) {
                     var tempPath = req.files[i].path;
                     var fileExtension = path_1.default.extname(req.files[i].originalname).toLowerCase();
                     var imageName = uuid();

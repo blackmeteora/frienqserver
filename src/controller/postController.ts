@@ -24,7 +24,7 @@ class PostController{
             post.explanation = req.body.explanation;
             post.items = new Array<PostItemModel>();
             
-            for(var i=0;i<req.files.length;i++){
+            for(var i=0;req.files!=null && i<req.files.length;i++){
                 
                 var tempPath = req.files[i].path;
                 var fileExtension = path.extname(req.files[i].originalname).toLowerCase();
