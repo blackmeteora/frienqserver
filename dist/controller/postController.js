@@ -86,7 +86,7 @@ class PostController {
                         postItem.id = uuid();
                         postItem.id_post = post.id;
                         postItem.id_type = 0;
-                        postItem.link = `${imageName}${fileExtension}`;
+                        postItem.link = '';
                         postItem.rate = 0;
                         postItem.count_rate = 0;
                         postItem.deleted = false;
