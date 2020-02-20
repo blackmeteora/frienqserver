@@ -31,8 +31,21 @@ class PostModel {
             queries.push("insert into frienq_post (id,uid_member,id_type,id_def_security_level,location,lat,lan,explanation,count_rate,count_comment,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             parameters.push([this.id, this.uid_member, this.id_type, this.id_def_security_level, this.location, this.lat, this.lan, this.explanation, this.count_rate, this.count_commet, this.deleted, this.date_create, this.date_update, this.date_delete]);
             for (var i = 0; i < this.items.length; i++) {
-                queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,order_no,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?)");
-                parameters.push([this.items[i].id, this.items[i].id_post, this.items[i].id_type, this.items[i].link, this.items[i].explanation, this.items[i].rate, this.items[i].count_rate, this.items[i].order_no, this.items[i].deleted, this.items[i].date_create, this.items[i].date_update, this.items[i].date_delete]);
+                queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,order_no,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?)");
+                parameters.push([
+                    this.items[i].id,
+                    this.items[i].id_post,
+                    this.items[i].id_type,
+                    this.items[i].link,
+                    this.items[i].explanation,
+                    this.items[i].rate,
+                    this.items[i].count_rate,
+                    this.items[i].order_no,
+                    this.items[i].deleted,
+                    this.items[i].date_create,
+                    this.items[i].date_update,
+                    this.items[i].date_delete
+                ]);
             }
             try {
                 var result = yield database_1.default.executeQuery(queries, parameters);
