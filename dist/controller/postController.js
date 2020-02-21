@@ -36,15 +36,15 @@ class PostController {
                 post.location = req.body.location;
                 post.explanation = req.body.explanation;
                 post.items = new Array();
+                var targetPath = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/`);
+                if (fs_1.default.existsSync(targetPath))
+                    fs_1.default.rmdirSync(targetPath, { recursive: true });
                 for (var i = 0; req.files != null && i < req.files.length; i++) {
                     var tempPath = req.files[i].path;
                     var fileExtension = path_1.default.extname(req.files[i].originalname).toLowerCase();
                     var imageName = uuid();
                     var targetFile = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/${imageName}${fileExtension}`);
-                    var targetPath = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/`);
                     if (fileExtension === '.png' || fileExtension === '.jpg' || fileExtension === '.jpeg' || fileExtension === '.gif' || fileExtension === '.mp4' || fileExtension === '.mov') {
-                        if (fs_1.default.existsSync(targetPath))
-                            fs_1.default.rmdirSync(targetPath, { recursive: true });
                         fs_1.default.mkdirSync(targetPath, { recursive: true });
                         fs_1.default.rename(tempPath, targetFile, function (err) {
                             return __awaiter(this, void 0, void 0, function* () {

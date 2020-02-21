@@ -23,6 +23,9 @@ class PostController{
             post.location = req.body.location;
             post.explanation = req.body.explanation;
             post.items = new Array<PostItemModel>();
+
+            var targetPath=path.resolve(`./data/user/${user.uid}/post/${post.id}/`);
+            if(fs.existsSync(targetPath)) fs.rmdirSync(targetPath, { recursive: true });
             
             for(var i=0;req.files!=null && i<req.files.length;i++){
                 
@@ -30,11 +33,8 @@ class PostController{
                 var fileExtension = path.extname(req.files[i].originalname).toLowerCase();
                 var imageName = uuid();
                 var targetFile=path.resolve(`./data/user/${user.uid}/post/${post.id}/${imageName}${fileExtension}`);
-                var targetPath=path.resolve(`./data/user/${user.uid}/post/${post.id}/`);
-
-                if(fileExtension==='.png' || fileExtension==='.jpg' || fileExtension==='.jpeg' || fileExtension==='.gif' || fileExtension==='.mp4' || fileExtension==='.mov') {
-                    
-                    if(fs.existsSync(targetPath)) fs.rmdirSync(targetPath, { recursive: true });
+                
+                if(fileExtension==='.png' || fileExtension==='.jpg' || fileExtension==='.jpeg' || fileExtension==='.gif' || fileExtension==='.mp4' || fileExtension==='.mov') {           
                     
                     fs.mkdirSync(targetPath, { recursive: true });
                     
