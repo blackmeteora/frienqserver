@@ -239,4 +239,17 @@ export default class PostModel {
 
             return result;
     }
+
+    public static async VotePost(userfrom:any, userto:any, postid:string, postitemid:string){
+        
+        var rateResult = await database.executeQuery([
+            "delete from frienq_post_item_select where id_post=? and uid_member_from=?",
+            "insert into frienq_post_item_select (id_post,uid_member_from,id_post_item,uid_member_to) values (?,?,?,?)"
+        ],
+        [[postid,userfrom.uid],[postid,userfrom.uid,postitemid,userto]]);
+
+        let res:any = rateResult[1];
+
+        return res["affectedRows"] == 1;
+    }
 }

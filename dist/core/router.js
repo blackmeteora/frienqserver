@@ -49,6 +49,7 @@ class Router {
         api.post("/Post/DeleteComment", postController_1.default.DeleteComment);
         api.post("/Post/CommentList", postController_1.default.CommentList);
         api.post("/Post/CommentHistoryList", postController_1.default.CommentHistoryList);
+        api.post("/Post/VotePost", postController_1.default.VotePost);
         //End Post Controller
     }
 }

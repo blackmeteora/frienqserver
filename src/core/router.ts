@@ -50,6 +50,7 @@ class Router{
         api.post("/Post/DeleteComment", PostController.DeleteComment);
         api.post("/Post/CommentList", PostController.CommentList);
         api.post("/Post/CommentHistoryList", PostController.CommentHistoryList);
+        api.post("/Post/VotePost", PostController.VotePost);
         //End Post Controller
     }
 }

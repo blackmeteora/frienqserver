@@ -280,6 +280,22 @@ class PostController{
 
         res.send(resultModel);
     }
+
+    public async VotePost(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.VotePost(req.body.user,req.body.uid_member,req.body.id_post,req.body.id_post_item);
+            FrienqNotificationModel.sendNotifications(req.body.uid_member);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
 }
 
 export default new PostController();

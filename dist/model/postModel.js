@@ -206,6 +206,16 @@ class PostModel {
             return result;
         });
     }
+    static VotePost(userfrom, userto, postid, postitemid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var rateResult = yield database_1.default.executeQuery([
+                "delete from frienq_post_item_select where id_post=? and uid_member_from=?",
+                "insert into frienq_post_item_select (id_post,uid_member_from,id_post_item,uid_member_to) values (?,?,?,?)"
+            ], [[postid, userfrom.uid], [postid, userfrom.uid, postitemid, userto]]);
+            let res = rateResult[1];
+            return res["affectedRows"] == 1;
+        });
+    }
 }
 exports.default = PostModel;
 //# sourceMappingURL=postModel.js.map

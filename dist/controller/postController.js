@@ -280,6 +280,21 @@ class PostController {
             res.send(resultModel);
         });
     }
+    VotePost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.VotePost(req.body.user, req.body.uid_member, req.body.id_post, req.body.id_post_item);
+                frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
 }
 exports.default = new PostController();
 //# sourceMappingURL=postController.js.map

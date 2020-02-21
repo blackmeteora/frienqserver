@@ -5,7 +5,7 @@ export default class PostItemModel {
     public link:string;
     public rate:number=0;
     public count_rate:number=0;
-    public explanation:string;
+    public explanation:string="";
     public order_no:number=0;
     public deleted:boolean=false;
     public date_create:Date=new Date();
