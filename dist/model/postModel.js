@@ -58,7 +58,7 @@ class PostModel {
     }
     static GetPost(user, id_post) {
         return __awaiter(this, void 0, void 0, function* () {
-            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then 0 else frienq_post_item_select.id_post_item end as member_select " +
+            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then '' else frienq_post_item_select.id_post_item end as member_select " +
                 "from frienq_post " +
                 "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
                 "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?" +
@@ -89,7 +89,7 @@ class PostModel {
             var params = [user.uid, user.uid, user.uid, user.uid];
             if (uid_member != "")
                 params.push(uid_member);
-            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then 0 else frienq_post_item_select.id_post_item end as member_select " +
+            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then '' else frienq_post_item_select.id_post_item end as member_select " +
                 "from frienq_post " +
                 "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
                 "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?" +
