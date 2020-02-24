@@ -286,6 +286,12 @@ class PostController {
             try {
                 resultModel.result = true;
                 resultModel.data = yield postModel_1.default.VotePost(req.body.user, req.body.uid_member, req.body.id_post, req.body.id_post_item);
+                if (resultModel.data)
+                    resultModel.data = yield postModel_1.default.GetPost(req.body.user, req.body.id_post);
+                else
+                    throw new Error("Error when trying to vote post !");
+                if (resultModel.data == undefined)
+                    throw new Error("Error when trying to vote post !");
                 frienqNotificationModel_1.default.sendNotifications(req.body.uid_member);
             }
             catch (ex) {

@@ -287,6 +287,9 @@ class PostController{
         try{
             resultModel.result=true;
             resultModel.data = await PostModel.VotePost(req.body.user,req.body.uid_member,req.body.id_post,req.body.id_post_item);
+            if(resultModel.data) resultModel.data = await PostModel.GetPost(req.body.user,req.body.id_post);
+            else throw new Error("Error when trying to vote post !");
+            if(resultModel.data==undefined) throw new Error("Error when trying to vote post !");
             FrienqNotificationModel.sendNotifications(req.body.uid_member);
         }
         catch(ex){
