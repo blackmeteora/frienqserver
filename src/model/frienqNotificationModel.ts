@@ -12,7 +12,7 @@ export default class FrienqNotificationModel {
             "from frienq_notification "+
             "inner join frienq_member on frienq_member.uid=frienq_notification.uid_frienq "+
             "where frienq_notification.deleted=0 and frienq_notification.uid_owner=? and frienq_notification.id>? "+
-            "limit 15 order by frienq_notification.date_create desc",[user.uid,id_last]);
+            "order by frienq_notification.date_create desc limit 15 ",[user.uid,id_last]);
         
         if(result.length>0){
             for(var i=0;i<result.length;i++){
