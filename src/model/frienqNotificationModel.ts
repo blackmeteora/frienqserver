@@ -51,10 +51,13 @@ export default class FrienqNotificationModel {
     }
 
     public static async sendNotifications(uid:String){
-        var client = socket.findSocketByUID(uid);
-        if(client!=null) {
-            var result = await FrienqNotificationModel.getNotifications(client.user, 0);
-            client.socket.write('Notification::::'+JSON.stringify(result));
+        var clients = socket.findSocketByUID(uid);
+        if(clients!=null) {
+            for(var i=0;i<clients.length;i++){
+                var client = clients[i];
+                var result = await FrienqNotificationModel.getNotifications(client.user, 0);
+                client.socket.write('Notification::::'+JSON.stringify(result));
+            }
         }
     }
 

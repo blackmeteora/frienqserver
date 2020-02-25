@@ -12,10 +12,19 @@ function findSocketByToken(token:String){
     return null;
 }
 
-function findSocketByUID(uid:String){
+function findSocket(socket:any){
     for(var i=0;i<socketlist.length;i++){
-        if(socketlist[i].user.uid==uid) return socketlist[i];
+        if(socketlist[i].socket==socket) return socketlist[i];
     }
+    return null;
+}
+
+function findSocketByUID(uid:String){
+    var result:SocketModel[] = [];
+    for(var i=0;i<socketlist.length;i++){
+        if(socketlist[i].user.uid==uid) result.push(socketlist[i]);
+    }
+    if(result.length>0) return result;
     return null;
 }
 
@@ -73,11 +82,9 @@ netserver.on("connection", function(socket: any) {
         }
 
         if(netdata[2]=="Hello"){
-            var old = findSocketByToken(netdata[0]);
+            //var old = findSocketByToken(netdata[0]);
+            var old = findSocket(socket);
             if(old == null) socketlist.push(new SocketModel(netdata[0], socket, user));
-            else{
-                old.socket = socket;
-            }
             socket.write('Data::::Hello');
             //setTimeout(function(){socket.write('Data::::Out Stream');},5000);
         }

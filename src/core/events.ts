@@ -12,10 +12,13 @@ export default class Events{
 
     Events(){
         this.Event.on(Events.SendNotification, function (data:String) {
-            var client = socket.findSocketByUID(data);
-            if(client!=null) {
-                var result = FrienqNotificationModel.getNotifications(client.user, 0);
-                client.socket.write('Notification::::'+JSON.stringify(result));
+            var clients = socket.findSocketByUID(data);
+            if(clients!=null) {
+                for(var i=0; i<clients.length;i++){
+                    var client = clients[i];
+                    var result = FrienqNotificationModel.getNotifications(client.user, 0);
+                    client.socket.write('Notification::::'+JSON.stringify(result));
+                }
             }
         });
     }

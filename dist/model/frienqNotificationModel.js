@@ -60,10 +60,13 @@ class FrienqNotificationModel {
     }
     static sendNotifications(uid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var client = socket_1.default.findSocketByUID(uid);
-            if (client != null) {
-                var result = yield FrienqNotificationModel.getNotifications(client.user, 0);
-                client.socket.write('Notification::::' + JSON.stringify(result));
+            var clients = socket_1.default.findSocketByUID(uid);
+            if (clients != null) {
+                for (var i = 0; i < clients.length; i++) {
+                    var client = clients[i];
+                    var result = yield FrienqNotificationModel.getNotifications(client.user, 0);
+                    client.socket.write('Notification::::' + JSON.stringify(result));
+                }
             }
         });
     }
