@@ -69,6 +69,7 @@ export default class PostModel {
         var postList = "";
         
         for(var i=0;i<postResult.length;i++){
+           postResult[i].frienq = JSON.parse(postResult[i].frienq);
            postList=postList+",'"+postResult[i].id+"'"
            postResult[i].items=new Array<any>();
            delete postResult[i].deleted;
@@ -110,6 +111,7 @@ export default class PostModel {
         var postList = "";
         
         for(var i=0;i<postResult.length;i++){
+           postResult[i].frienq = JSON.parse(postResult[i].frienq);
            postList=postList+",'"+postResult[i].id+"'"
            postResult[i].items=new Array<any>();
            delete postResult[i].deleted;

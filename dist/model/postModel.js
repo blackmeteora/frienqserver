@@ -70,6 +70,7 @@ class PostModel {
                 "limit 100", [user.uid, user.uid, user.uid, user.uid, id_post]);
             var postList = "";
             for (var i = 0; i < postResult.length; i++) {
+                postResult[i].frienq = JSON.parse(postResult[i].frienq);
                 postList = postList + ",'" + postResult[i].id + "'";
                 postResult[i].items = new Array();
                 delete postResult[i].deleted;
@@ -103,6 +104,7 @@ class PostModel {
                 "limit 100", params);
             var postList = "";
             for (var i = 0; i < postResult.length; i++) {
+                postResult[i].frienq = JSON.parse(postResult[i].frienq);
                 postList = postList + ",'" + postResult[i].id + "'";
                 postResult[i].items = new Array();
                 delete postResult[i].deleted;
