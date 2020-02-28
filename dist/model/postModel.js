@@ -224,6 +224,21 @@ class PostModel {
             return res["affectedRows"] == 1;
         });
     }
+    static VoteList(user, id_post, id_post_item) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var result = yield database_1.default.select("select frienq_member.*, " +
+                "case when ISNULL(frienq_member_frienq.uid_owner) then 0 else 1 end as is_frienq " +
+                "from frienq_member " +
+                "inner join frienq_post on frienq_post.uid_member = ? and frienq_post.id=?" +
+                "inner join frienq_post_item_select on frienq_post_item_select.id_post = frienq_post.id and frienq_post_item_select.id_post_item = ? and frienq_post_item_select.uid_member_from = frienq_member.uid " +
+                "left join frienq_member_frienq on frienq_member_frienq.uid_owner = frienq_member.uid and frienq_member_frienq.uid_member = ? ", [user.uid, id_post, id_post_item, user.uid]);
+            for (var i = 0; i < result.length; i++) {
+                delete result[i].deleted;
+                delete result[i].password;
+            }
+            return result;
+        });
+    }
 }
 exports.default = PostModel;
 //# sourceMappingURL=postModel.js.map

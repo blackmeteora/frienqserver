@@ -299,6 +299,21 @@ class PostController{
 
         res.send(resultModel);
     }
+
+    public async VoteList(req:any, res:any){
+        var resultModel =  new ResultModel();
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.VoteList(req.body.user, req.body.id_post, req.body.id_post_item);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
 }
 
 export default new PostController();

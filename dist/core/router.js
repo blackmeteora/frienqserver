@@ -50,6 +50,7 @@ class Router {
         api.post("/Post/CommentList", postController_1.default.CommentList);
         api.post("/Post/CommentHistoryList", postController_1.default.CommentHistoryList);
         api.post("/Post/VotePost", postController_1.default.VotePost);
+        api.post("/Post/VoteList", postController_1.default.VoteList);
         //End Post Controller
     }
 }
