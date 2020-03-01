@@ -103,7 +103,7 @@ class FrienqController {
             });
             image.on('error', function (e) {
                 res.set('Content-Type', 'text/plain');
-                res.status(404).end(e);
+                res.status(404).end('404 - Not Found.');
             });
         }
         else {
