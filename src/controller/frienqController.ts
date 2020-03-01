@@ -90,9 +90,9 @@ class FrienqController {
                 //res.set('Content-Type', "image/jpeg");
                 image.pipe(res);
             });
-            image.on('error', function () {
+            image.on('error', function (e) {
                 res.set('Content-Type', 'text/plain');
-                res.status(404).end('404 - Not found');
+                res.status(404).end(e);
             });
         }
         else{
