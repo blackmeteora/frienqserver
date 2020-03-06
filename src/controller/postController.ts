@@ -131,7 +131,7 @@ class PostController{
 
         try{
             resultModel.result=true;
-            resultModel.data = await PostModel.GetFeed(user,req.body.uid_member, "");
+            resultModel.data = await PostModel.GetFeed(user,req.body.uid_member, "", req.body.mode);
         }
         catch(ex){
             resultModel.result=false;

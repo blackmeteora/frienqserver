@@ -87,21 +87,22 @@ class PostModel {
             return postResult[0];
         });
     }
-    static GetFeed(user, uid_member = "", lastPost = "") {
+    static GetFeed(user, uid_member = "", lastPost = "", mode = 0) {
         return __awaiter(this, void 0, void 0, function* () {
             var params = [user.uid, user.uid, user.uid, user.uid];
             if (uid_member != "")
                 params.push(uid_member);
-            var postResult = yield database_1.default.select("select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then '' else frienq_post_item_select.id_post_item end as member_select, " +
+            var sql = "select distinct frienq_post.*,case when frienq_rate.rate is null then 0 else frienq_rate.rate end as member_rate, case when frienq_post_item_select.id_post_item is null then '' else frienq_post_item_select.id_post_item end as member_select, " +
                 "JSON_OBJECT('uid',frienq_member.uid, 'name',frienq_member.name, 'surname',frienq_member.surname, 'username',frienq_member.username , 'profile_picture',frienq_member.profile_picture) as frienq " +
                 "from frienq_post " +
                 "inner join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member or frienq_post.uid_member=? " +
                 "inner join frienq_member on frienq_member.uid=frienq_post.uid_member " +
                 "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?" +
                 "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from=?" +
-                "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 " + (uid_member != "" ? "and frienq_post.uid_member=? " : "") +
+                "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 " + (uid_member != "" ? "and frienq_post.uid_member=? " : "") + (mode == 0 ? "" : " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null)") +
                 "order by frienq_post.date_create desc " +
-                "limit 100", params);
+                "limit 100";
+            var postResult = yield database_1.default.select(sql, params);
             var postList = "";
             for (var i = 0; i < postResult.length; i++) {
                 postResult[i].frienq = JSON.parse(postResult[i].frienq);
