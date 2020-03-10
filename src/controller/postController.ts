@@ -128,10 +128,11 @@ class PostController{
         
         var user = req.body.user;
         var lastPost = req.body.lastPost;
+        if(lastPost==undefined || lastPost==null) lastPost="";
 
         try{
             resultModel.result=true;
-            resultModel.data = await PostModel.GetFeed(user,req.body.uid_member, "", req.body.mode);
+            resultModel.data = await PostModel.GetFeed(user,req.body.uid_member, lastPost, req.body.mode);
         }
         catch(ex){
             resultModel.result=false;

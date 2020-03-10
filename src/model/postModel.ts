@@ -103,9 +103,12 @@ export default class PostModel {
         "inner join frienq_member on frienq_member.uid=frienq_post.uid_member "+
         "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from=?"+
         "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from=?"+
-        "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 "+(uid_member!="" ? "and frienq_post.uid_member=? ":"")+(mode==0 ? "" : " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null)")+
+        "where frienq_member_frienq.uid_member=? and frienq_post.deleted=0 "+
+        (uid_member!="" ? "and frienq_post.uid_member=? ":"")+
+        (mode==0 ? "" : " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null)")+
+        (lastPost=="" ? "" : " and (frienq_post.date_create <= (select date_create from frienq_post where id='"+lastPost+"' limit 1) and frienq_post.id!='"+lastPost+"')")+
         "order by frienq_post.date_create desc "+
-        "limit 100";
+        "limit 10";
 
         var postResult = await database.select(sql,params);
         
