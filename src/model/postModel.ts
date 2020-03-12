@@ -110,7 +110,7 @@ export default class PostModel {
         (mode==1 ? " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null) " : "")+
         (lastPost=="" ? "" : " and (frienq_post.date_create <= (select date_create from frienq_post where id='"+lastPost+"' limit 1) and frienq_post.id!='"+lastPost+"') ")+
         "order by frienq_post.date_create desc "+
-        "limit 100";
+        "limit 10";
 
         var postResult = await database.select(sql,params);
         
