@@ -133,12 +133,12 @@ class PostController {
                     const chunksize = (end - start) + 1;
                     const _file = fs_1.default.createReadStream(file, { start, end: total });
                     const head = {
-                        'Content-Range': `bytes ${start}-${end}/${total}`,
+                        'Content-Range': `bytes ${start}-${total}/${total}`,
                         'Accept-Ranges': 'bytes',
                         'Content-Length': chunksize,
                         'Content-Type': mime.lookup(req.headers["QueryString"].f),
                     };
-                    res.writeHead(206, head);
+                    res.writeHead(200, head);
                     _file.pipe(res);
                     //res.set('Accept-Ranges', 'bytes');
                     //res.set('Content-Length', total);
