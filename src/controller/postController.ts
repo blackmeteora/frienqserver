@@ -131,7 +131,7 @@ class PostController{
                     'Content-Type': mime.lookup(req.headers["QueryString"].f),
                 }
                 
-                res.writeHead(200, head);
+                res.writeHead(206, head);
                 _file.pipe(res);
 
                 //res.set('Accept-Ranges', 'bytes');
