@@ -126,10 +126,10 @@ class PostController {
                 var total = stat.size;
                 image.on('open', function () {
                     var mime = require('mime-types');
-                    const range = req.headers.range;
-                    const parts = range.replace(/bytes=/, "").split("-");
-                    const start = parseInt(parts[0], 10);
-                    const end = parts[1] ? parseInt(parts[1], 10) : total - 1;
+                    //const range = req.headers.range;
+                    // const parts = range.replace(/bytes=/, "").split("-");
+                    const start = 0;
+                    const end = 1023;
                     const chunksize = (end - start) + 1;
                     const _file = fs_1.default.createReadStream(file, { start, end });
                     const head = {
