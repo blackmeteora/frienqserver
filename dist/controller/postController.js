@@ -131,7 +131,7 @@ class PostController {
                     const start = 0;
                     const end = 1023;
                     const chunksize = (end - start) + 1;
-                    const _file = fs_1.default.createReadStream(file, { start, end });
+                    const _file = fs_1.default.createReadStream(file, { start, end: total });
                     const head = {
                         'Content-Range': `bytes ${start}-${end}/${total}`,
                         'Accept-Ranges': 'bytes',

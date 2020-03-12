@@ -120,11 +120,11 @@ class PostController{
                 
                 //const range = req.headers.range;
                // const parts = range.replace(/bytes=/, "").split("-");
-                const start =0;
+                const start = 0;
                 const end = 1023;
                 
                 const chunksize = (end-start)+1
-                const _file = fs.createReadStream(file, {start, end})
+                const _file = fs.createReadStream(file, {start, end:total})
                 const head = {
                     'Content-Range': `bytes ${start}-${end}/${total}`,
                     'Accept-Ranges': 'bytes',
