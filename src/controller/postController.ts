@@ -24,6 +24,10 @@ class PostController{
             post.explanation = req.body.explanation;
             post.items = new Array<PostItemModel>();
 
+            if(post.id_def_security_level==2 && req.body.frienq_members!=undefined){
+                post.frienq_members.push(req.body.frienq_members)
+            }
+
             var targetPath=path.resolve(`./data/user/${user.uid}/post/${post.id}/`);
             if(fs.existsSync(targetPath)) fs.rmdirSync(targetPath, { recursive: true });
             

@@ -18,6 +18,7 @@ export default class PostModel {
     public date_update:Date=new Date();
     public date_delete:Date=new Date();
     public items:Array<PostItemModel>;
+    public frienq_members:Array<String>;
     
     public async Save(){
         var queries:Array<string>=new Array<string>();
@@ -41,6 +42,11 @@ export default class PostModel {
                 this.items[i].date_create,
                 this.items[i].date_update,
                 this.items[i].date_delete]);
+        }
+
+        for(var i=0;i<this.frienq_members.length;i++){
+            queries.push("insert into frienq_post_member (id_post,uid_member) values (?,?)");
+            parameters.push([this.id, this.frienq_members[i]]);
         }
 
         try{

@@ -47,6 +47,10 @@ class PostModel {
                     this.items[i].date_delete
                 ]);
             }
+            for (var i = 0; i < this.frienq_members.length; i++) {
+                queries.push("insert into frienq_post_member (id_post,uid_member) values (?,?)");
+                parameters.push([this.id, this.frienq_members[i]]);
+            }
             try {
                 var result = yield database_1.default.executeQuery(queries, parameters);
                 return true;
