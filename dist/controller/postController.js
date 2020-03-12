@@ -126,11 +126,25 @@ class PostController {
                 var total = stat.size;
                 image.on('open', function () {
                     var mime = require('mime-types');
-                    res.set('Accept-Ranges', 'bytes');
-                    res.set('Content-Length', total);
-                    res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
-                    //image.pipe(res);
-                    fs_1.default.createReadStream(file).pipe(res);
+                    const range = req.headers.range;
+                    const parts = range.replace(/bytes=/, "").split("-");
+                    const start = parseInt(parts[0], 10);
+                    const end = parts[1] ? parseInt(parts[1], 10) : total - 1;
+                    const chunksize = (end - start) + 1;
+                    const _file = fs_1.default.createReadStream(file, { start, end });
+                    const head = {
+                        'Content-Range': `bytes ${start}-${end}/${total}`,
+                        'Accept-Ranges': 'bytes',
+                        'Content-Length': chunksize,
+                        'Content-Type': mime.lookup(req.headers["QueryString"].f),
+                    };
+                    res.writeHead(206, head);
+                    _file.pipe(res);
+                    //res.set('Accept-Ranges', 'bytes');
+                    //res.set('Content-Length', total);
+                    //res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
+                    ////image.pipe(res);
+                    //fs.createReadStream(file).pipe(res);
                 });
                 image.on('error', function () {
                     res.set('Content-Type', 'text/plain');
