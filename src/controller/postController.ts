@@ -113,10 +113,14 @@ class PostController{
         if(req.headers["QueryString"].u!=null && req.headers["QueryString"].p!=null && req.headers["QueryString"].f!=null){
             var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
             var image = fs.createReadStream(file);
+            var stat = fs.statSync(file);
+            var total = stat.size;
             image.on('open', function () {
                 var mime = require('mime-types');
+                res.set('Content-Length', total);
                 res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
-                image.pipe(res);
+                //image.pipe(res);
+                fs.createReadStream(file).pipe(res);
             });
             image.on('error', function () {
                 res.set('Content-Type', 'text/plain');
