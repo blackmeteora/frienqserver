@@ -123,7 +123,7 @@ class PostController {
                 var file = path_1.default.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
                 var image = fs_1.default.createReadStream(file);
                 image.on('open', function () {
-                    if (req.headers["QueryString"].f.indexOf('.mp4') || req.headers["QueryString"].f.indexOf('.mov'))
+                    if (req.headers["QueryString"].f.indexOf('.mp4') > -1 || req.headers["QueryString"].f.indexOf('.mov') > -1)
                         res.set('Content-Type', "application/octet-stream");
                     image.pipe(res);
                 });
