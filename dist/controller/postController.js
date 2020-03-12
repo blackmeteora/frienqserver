@@ -37,7 +37,8 @@ class PostController {
                 post.explanation = req.body.explanation;
                 post.items = new Array();
                 if (post.id_def_security_level == 2 && req.body.frienq_members != undefined) {
-                    post.frienq_members.push(req.body.frienq_members);
+                    for (var i = 0; i < req.body.frienq_members.length; i++)
+                        post.frienq_members.push(req.body.frienq_members[i]);
                 }
                 var targetPath = path_1.default.resolve(`./data/user/${user.uid}/post/${post.id}/`);
                 if (fs_1.default.existsSync(targetPath))

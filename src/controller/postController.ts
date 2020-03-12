@@ -25,7 +25,7 @@ class PostController{
             post.items = new Array<PostItemModel>();
 
             if(post.id_def_security_level==2 && req.body.frienq_members!=undefined){
-                post.frienq_members.push(req.body.frienq_members)
+                for(var i = 0; i< req.body.frienq_members.length; i++) post.frienq_members.push(req.body.frienq_members[i]);
             }
 
             var targetPath=path.resolve(`./data/user/${user.uid}/post/${post.id}/`);
