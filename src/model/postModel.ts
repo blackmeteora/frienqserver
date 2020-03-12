@@ -44,7 +44,7 @@ export default class PostModel {
                 this.items[i].date_delete]);
         }
 
-        for(var i=0;i<this.frienq_members.length;i++){
+        for(var i=0; this.frienq_members!=undefined && i<this.frienq_members.length; i++){
             queries.push("insert into frienq_post_member (id_post,uid_member) values (?,?)");
             parameters.push([this.id, this.frienq_members[i]]);
         }
