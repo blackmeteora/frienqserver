@@ -101,7 +101,7 @@ class PostModel {
                 "inner join frienq_member on frienq_member.uid=frienq_post.uid_member " +
                 "left join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member and frienq_member_frienq.uid_member='" + user.uid + "' " +
                 "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from='" + user.uid + "' " +
-                "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from='" + user.uid + "' and frienq_rate.rate>0 " +
+                "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from='" + user.uid + "'" +
                 "where frienq_post.deleted=0 " +
                 (self == true && mode == 0 ? " and frienq_post.uid_member='" + user.uid + "' " : "") +
                 (uid_member != "" && self == false && mode == 0 ? " and (frienq_post.uid_member='" + uid_member + "' and ((frienq_post.id_def_security_level=0) or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level=1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='" + user.uid + "')>0 ))  )) " : "") +
