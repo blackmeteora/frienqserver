@@ -126,6 +126,7 @@ class PostController {
                 var total = stat.size;
                 image.on('open', function () {
                     var mime = require('mime-types');
+                    res.set('Accept-Ranges', 'bytes');
                     res.set('Content-Length', total);
                     res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
                     //image.pipe(res);
