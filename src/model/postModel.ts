@@ -17,6 +17,7 @@ export default class PostModel {
     public date_create:Date=new Date();
     public date_update:Date=new Date();
     public date_delete:Date=new Date();
+    public date_last:Date = null;
     public items:Array<PostItemModel>;
     public frienq_members:Array<String>;
     
@@ -24,8 +25,23 @@ export default class PostModel {
         var queries:Array<string>=new Array<string>();
         var parameters:Array<any>=new Array<any>();
 
-        queries.push("insert into frienq_post (id,uid_member,id_type,id_def_security_level,location,lat,lan,explanation,count_rate,count_comment,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        parameters.push([this.id,this.uid_member,this.id_type,this.id_def_security_level,this.location,this.lat,this.lan,this.explanation,this.count_rate,this.count_commet,this.deleted,this.date_create,this.date_update,this.date_delete]);
+        queries.push("insert into frienq_post (id,uid_member,id_type,id_def_security_level,location,lat,lan,explanation,count_rate,count_comment,deleted,date_create,date_update,date_delete,date_last) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        parameters.push([
+            this.id,
+            this.uid_member,
+            this.id_type,
+            this.id_def_security_level,
+            this.location,
+            this.lat,
+            this.lan,
+            this.explanation,
+            this.count_rate,
+            this.count_commet,
+            this.deleted,
+            this.date_create,
+            this.date_update,
+            this.date_delete,
+            this.date_last==undefined ? null : this.date_last]);
 
         for(var i=0;i<this.items.length;i++){
             queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,order_no,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -98,7 +114,7 @@ export default class PostModel {
 
     public static async GetFeed(user:any,uid_member:string="", lastPost:string="", mode:number=0){
         
-        var self = user.uid == uid_member;
+        var self = user.uid == uid_member; //Who is
 
         let params:any[] = [];
         
@@ -110,11 +126,11 @@ export default class PostModel {
         "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from='"+user.uid+"' "+
         "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from='"+user.uid+"'"+
         "where frienq_post.deleted=0 "+
-        (self==true && mode==0 ? " and frienq_post.uid_member='"+user.uid+"' " : "")+
-        (uid_member!="" && self==false && mode==0 ? " and (frienq_post.uid_member='"+uid_member+"' and ((frienq_post.id_def_security_level=0) or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level=1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0 ))  )) ":"")+
-        (uid_member=="" && self==false && mode==0 ? "  and (frienq_post.uid_member='"+user.uid+"' or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level in (0,1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0) )) )":"")+
-        (mode==1 ? " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null) " : "")+
-        (lastPost=="" ? "" : " and (frienq_post.date_create <= (select date_create from frienq_post where id='"+lastPost+"' limit 1) and frienq_post.id!='"+lastPost+"') ")+
+        /*User Self*/               (self==true && mode==0 ? " and frienq_post.uid_member='"+user.uid+"' " : "")+
+        /*Another User Profile*/    (uid_member!="" && self==false && mode==0 ? " and (frienq_post.uid_member='"+uid_member+"' and ((frienq_post.id_def_security_level=0) or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level=1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0 ))  )) ":"")+
+        /*Feed*/                    (uid_member=="" && self==false && mode==0 ? "  and (frienq_post.uid_member='"+user.uid+"' or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level in (0,1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0) )) )":"")+
+        /*Fallowed Posts*/          (mode==1 ? " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null) " : "")+
+        /*Paging*/                  (lastPost=="" ? "" : " and (frienq_post.date_create <= (select date_create from frienq_post where id='"+lastPost+"' limit 1) and frienq_post.id!='"+lastPost+"') ")+
         "order by frienq_post.date_create desc "+
         "limit 10";
 

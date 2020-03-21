@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
 const resultModel_1 = __importDefault(require("../model/resultModel"));
+const facebookHelper_1 = __importDefault(require("../helper/facebookHelper"));
 const helper_1 = __importDefault(require("../core/helper"));
 const frienqModel_1 = __importDefault(require("../model/frienqModel"));
 const express_validator_1 = require("express-validator");
@@ -21,24 +22,36 @@ class AuthController {
     Login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var resultModel = new resultModel_1.default();
-            var errors = express_validator_1.validationResult(req);
-            if (!errors.isEmpty()) {
-                resultModel.result = false;
-                resultModel.msg = "Validation Failed !";
-                return res.status(422).json(resultModel);
+            //var errors = validationResult(req);
+            //if (!errors.isEmpty()) {
+            //    resultModel.result = false;
+            //    resultModel.msg = "Validation Failed !";
+            //    return res.status(422).json(resultModel);
+            //}
+            if (req.body.frienq_member_application != undefined) {
+                if (req.body.frienq_member_application.data_facebook != undefined)
+                    yield facebookHelper_1.default.Connect(req, res);
+                if (req.body.frienq_member_application.data_instagram != undefined)
+                    res.end(resultModel);
+                if (req.body.frienq_member_application.data_twitter != undefined)
+                    res.end(resultModel);
+                if (req.body.frienq_member_application.data_google != undefined)
+                    res.end(resultModel);
             }
-            try {
-                resultModel.result = true;
-                resultModel.data = yield frienqModel_1.default.getLoginToken(req.body.email, req.body.password);
-                if (resultModel.data == null)
-                    throw new Error("Unauthorized Login !");
+            else {
+                try {
+                    resultModel.result = true;
+                    resultModel.data = yield frienqModel_1.default.getLoginToken(req.body.email, req.body.password);
+                    if (resultModel.data == null)
+                        throw new Error("Unauthorized Login !");
+                }
+                catch (ex) {
+                    resultModel.result = false;
+                    resultModel.data = null;
+                    resultModel.msg = ex.message;
+                }
+                res.send(resultModel);
             }
-            catch (ex) {
-                resultModel.result = false;
-                resultModel.data = null;
-                resultModel.msg = ex.message;
-            }
-            res.send(resultModel);
         });
     }
     Register(req, res) {
@@ -46,19 +59,18 @@ class AuthController {
             var resultModel = new resultModel_1.default();
             var errors = express_validator_1.validationResult(req);
             if (!errors.isEmpty()) {
-                resultModel.result = false;
-                resultModel.msg = "Validation Failed !";
-                return res.status(422).json(resultModel);
+                //resultModel.result = false;
+                //resultModel.msg = "Validation Failed !";
+                //return res.status(422).json(resultModel);
             }
-            if (req.body.uid === undefined) {
-                var uuid = require("uuid/v4");
-                req.body.uid = uuid();
-            }
+            var uuid = require("uuid/v4");
+            req.body.uid = uuid();
             var result;
             try {
                 result = yield database_1.default.executeQuery([
                     "insert into frienq_member ( uid, id_sex, date_birth, date_sign, date_update, date_online, loc_lat, loc_lan, name, surname, username, password, profile_picture) values (?,?,?,?,?,?,?,?,?,?,?,?,'')",
-                    "insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);"
+                    "insert into frienq_member_email (uid_member, email, isdefault, confirmed) values (?,?, 1, 0);",
+                    "insert into frienq_member_application (uid_member, id_facebook, id_instagram, id_twitter, id_google, data_facebook, data_instagram, data_twitter, data_google) values (?,?,?,?,?,?,?,?,?)"
                 ], [[
                         req.body.uid,
                         req.body.id_sex,
@@ -76,6 +88,17 @@ class AuthController {
                     [
                         req.body.uid,
                         req.body.email
+                    ],
+                    [
+                        req.body.uid,
+                        req.body.frienq_member_application.id_facebook == undefined ? null : req.body.frienq_member_application.id_facebook,
+                        req.body.frienq_member_application.id_instagram == undefined ? null : req.body.frienq_member_application.id_instagram,
+                        req.body.frienq_member_application.id_twitter == undefined ? null : req.body.frienq_member_application.id_twitter,
+                        req.body.frienq_member_application.id_google == undefined ? null : req.body.frienq_member_application.id_google,
+                        req.body.frienq_member_application.data_facebook == undefined ? null : req.body.frienq_member_application.data_facebook,
+                        req.body.frienq_member_application.data_instagram == undefined ? null : req.body.frienq_member_application.data_instagram,
+                        req.body.frienq_member_application.data_twitter == undefined ? null : req.body.frienq_member_application.data_twitter,
+                        req.body.frienq_member_application.data_google == undefined ? null : req.body.frienq_member_application.data_google,
                     ]
                 ]);
             }

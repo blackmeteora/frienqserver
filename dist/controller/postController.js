@@ -37,6 +37,7 @@ class PostController {
                 post.explanation = req.body.explanation;
                 post.items = new Array();
                 post.frienq_members = new Array();
+                post.date_last = req.body.date_last;
                 if (post.id_def_security_level == 2 && req.body.frienq_members != undefined) {
                     //for(var i = 0; i< req.body.frienq_members.length; i++) 
                     post.frienq_members.push(req.body.frienq_members);
