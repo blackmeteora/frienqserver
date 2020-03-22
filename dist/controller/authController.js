@@ -91,14 +91,14 @@ class AuthController {
                     ],
                     [
                         req.body.uid,
-                        req.body.frienq_member_application.id_facebook == undefined ? null : req.body.frienq_member_application.id_facebook,
-                        req.body.frienq_member_application.id_instagram == undefined ? null : req.body.frienq_member_application.id_instagram,
-                        req.body.frienq_member_application.id_twitter == undefined ? null : req.body.frienq_member_application.id_twitter,
-                        req.body.frienq_member_application.id_google == undefined ? null : req.body.frienq_member_application.id_google,
-                        req.body.frienq_member_application.data_facebook == undefined ? null : req.body.frienq_member_application.data_facebook,
-                        req.body.frienq_member_application.data_instagram == undefined ? null : req.body.frienq_member_application.data_instagram,
-                        req.body.frienq_member_application.data_twitter == undefined ? null : req.body.frienq_member_application.data_twitter,
-                        req.body.frienq_member_application.data_google == undefined ? null : req.body.frienq_member_application.data_google,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.id_facebook == undefined ? null : req.body.frienq_member_application.id_facebook,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.id_instagram == undefined ? null : req.body.frienq_member_application.id_instagram,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.id_twitter == undefined ? null : req.body.frienq_member_application.id_twitter,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.id_google == undefined ? null : req.body.frienq_member_application.id_google,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.data_facebook == undefined ? null : req.body.frienq_member_application.data_facebook,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.data_instagram == undefined ? null : req.body.frienq_member_application.data_instagram,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.data_twitter == undefined ? null : req.body.frienq_member_application.data_twitter,
+                        req.body.frienq_member_application == undefined || req.body.frienq_member_application.data_google == undefined ? null : req.body.frienq_member_application.data_google,
                     ]
                 ]);
             }
