@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
-const helper_1 = __importDefault(require("../core/helper"));
 class PostModel {
     constructor() {
         this.explanation = "";
@@ -46,7 +45,7 @@ class PostModel {
                 this.date_create,
                 this.date_update,
                 this.date_delete,
-                this.date_last == undefined ? null : helper_1.default.utcDate(this.date_last)
+                this.date_last == undefined ? null : new Date(this.date_last)
             ]);
             for (var i = 0; i < this.items.length; i++) {
                 queries.push("insert into frienq_post_item (id,id_post,id_type,link,explanation,rate,count_rate,order_no,deleted,date_create,date_update,date_delete) values (?,?,?,?,?,?,?,?,?,?,?,?)");
