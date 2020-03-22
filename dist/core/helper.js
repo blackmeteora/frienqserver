@@ -6,5 +6,8 @@ exports.default = new class Helper {
             replace(/T/, ' ').
             replace(/\..+/, '');
     }
+    utcDate(date) {
+        return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    }
 };
 //# sourceMappingURL=helper.js.map

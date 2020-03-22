@@ -6,4 +6,8 @@ export default new class Helper {
         replace(/\..+/, '');
     }
 
+    public utcDate(date:Date) : number {
+        return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    }
+
 }
