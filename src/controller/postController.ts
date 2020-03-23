@@ -114,11 +114,12 @@ class PostController{
 
     public async Media(req:any, res:any){
         if(req.headers["QueryString"].u!=null && req.headers["QueryString"].p!=null && req.headers["QueryString"].f!=null){
-            var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
-            var image = fs.createReadStream(file);
-            var stat = fs.statSync(file);
-            var total = stat.size;
             try{
+                var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
+                var image = fs.createReadStream(file);
+                var stat = fs.statSync(file);
+                var total = stat.size;
+           
                 image.on('open', function () {
                     var mime = require('mime-types');
 
@@ -133,7 +134,7 @@ class PostController{
                 });
             }catch(ex){
                 res.set('Content-Type', 'text/plain');
-                res.status(404).end(ex.message);
+                res.status(500).end(ex.message);
             }
         }else{
             res.set('Content-Type', 'text/plain');

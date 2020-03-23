@@ -123,11 +123,11 @@ class PostController {
     Media(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             if (req.headers["QueryString"].u != null && req.headers["QueryString"].p != null && req.headers["QueryString"].f != null) {
-                var file = path_1.default.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
-                var image = fs_1.default.createReadStream(file);
-                var stat = fs_1.default.statSync(file);
-                var total = stat.size;
                 try {
+                    var file = path_1.default.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
+                    var image = fs_1.default.createReadStream(file);
+                    var stat = fs_1.default.statSync(file);
+                    var total = stat.size;
                     image.on('open', function () {
                         var mime = require('mime-types');
                         res.set('Content-Length', total);
@@ -141,7 +141,7 @@ class PostController {
                 }
                 catch (ex) {
                     res.set('Content-Type', 'text/plain');
-                    res.status(404).end(ex.message);
+                    res.status(500).end(ex.message);
                 }
             }
             else {
