@@ -116,22 +116,27 @@ class PostController{
         if(req.headers["QueryString"].u!=null && req.headers["QueryString"].p!=null && req.headers["QueryString"].f!=null){
             try{
                 var file = path.resolve(`./data/user/${req.headers["QueryString"].u}/post/${req.headers["QueryString"].p}/${req.headers["QueryString"].f}`);
-                var image = fs.createReadStream(file);
-                var stat = fs.statSync(file);
-                var total = stat.size;
-           
-                image.on('open', function () {
-                    var mime = require('mime-types');
+                if(fs.existsSync(file)){
+                    var image = fs.createReadStream(file);
+                    var stat = fs.statSync(file);
+                    var total = stat.size;
+            
+                    image.on('open', function () {
+                        var mime = require('mime-types');
 
-                    res.set('Content-Length', total);
-                    res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
-                    
-                    fs.createReadStream(file).pipe(res);
-                });
-                image.on('error', function () {
+                        res.set('Content-Length', total);
+                        res.set('Content-Type', mime.lookup(req.headers["QueryString"].f));
+                        
+                        fs.createReadStream(file).pipe(res);
+                    });
+                    image.on('error', function () {
+                        res.set('Content-Type', 'text/plain');
+                        res.status(404).end('404 - Not found');
+                    });
+                }else{
                     res.set('Content-Type', 'text/plain');
                     res.status(404).end('404 - Not found');
-                });
+                }
             }catch(ex){
                 res.set('Content-Type', 'text/plain');
                 res.status(500).end(ex.message);
