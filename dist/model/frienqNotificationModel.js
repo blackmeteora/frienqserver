@@ -80,8 +80,7 @@ class FrienqNotificationModel {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         id: item.id,
-                        data: item.notification_data,
-                        data2: item.notification_data2,
+                        notification: item,
                         status: "done"
                     },
                     condition: `'${uid}' in topics`
