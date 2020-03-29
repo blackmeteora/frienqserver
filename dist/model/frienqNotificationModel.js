@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../core/database"));
-const socket_1 = __importDefault(require("../socket"));
 const postModel_1 = __importDefault(require("./postModel"));
+const frienqModel_1 = __importDefault(require("./frienqModel"));
 class FrienqNotificationModel {
     static getNotifications(user, id_last) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,14 +60,67 @@ class FrienqNotificationModel {
     }
     static sendNotifications(uid) {
         return __awaiter(this, void 0, void 0, function* () {
-            var clients = socket_1.default.findSocketByUID(uid);
-            if (clients != null) {
-                for (var i = 0; i < clients.length; i++) {
-                    var client = clients[i];
-                    var result = yield FrienqNotificationModel.getNotifications(client.user, 0);
-                    client.socket.write('Notification::::' + JSON.stringify(result));
+            const https = require('https');
+            var user = yield frienqModel_1.default.findByID(uid);
+            var result = yield FrienqNotificationModel.getNotifications(user, 0);
+            for (var i = 0; i < result.length && i < 1; i++) {
+                var item = result[i];
+                var frienq = null;
+                if (item.notified)
+                    continue;
+                if (item.notification_data != null)
+                    frienq = yield frienqModel_1.default.findByID(item.uid_frienq);
+                var notification = {
+                    notification: {
+                        body: "Frienq",
+                        title: "",
+                        icon: `http://5.11.131.101:3000/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
+                    },
+                    priority: "high",
+                    data: {
+                        click_action: "FLUTTER_NOTIFICATION_CLICK",
+                        id: item.id,
+                        data: item.notification_data,
+                        data2: item.notification_data2,
+                        status: "done"
+                    },
+                    condition: `'${uid}' in topics`
+                };
+                var notificationText = "";
+                switch (item.notification_type) {
+                    case 0:
+                        notificationText = "started to be frienq to you.";
+                        break;
+                    default:
+                        break;
                 }
+                notification.notification.title = `${frienq.name} ${frienq.surname} ${notificationText}`;
+                var data = JSON.stringify(notification);
+                const options = {
+                    hostname: 'fcm.googleapis.com',
+                    port: 443,
+                    path: '/fcm/send',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': data.length,
+                        'Authorization': 'key=AAAAK5swcXA:APA91bGsRBY0ZpJzQV6IauPWB-vnrqjakN0NXPjQw2lVcYt60undrgy8LWSpawOusjWz-2OOTq4lqO70ckacqd1zCc6k-8OLwzgNEy_DvA2iRJc63IUQWFrC8Govs4Cbju3KDvmE_zSa'
+                    }
+                };
+                const req = https.request(options, (res) => {
+                    console.log(`statusCode: ${res.statusCode}`);
+                });
+                req.write(data);
+                req.end();
             }
+            //var clients = socket.findSocketByUID(uid);
+            //if(clients!=null) {
+            //    for(var i=0;i<clients.length;i++){
+            //        var client = clients[i];
+            //        var result = await FrienqNotificationModel.getNotifications(client.user, 0);
+            //        client.socket.write('Notification::::'+JSON.stringify(result));
+            //    }
+            //}
         });
     }
 }
