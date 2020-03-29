@@ -75,7 +75,7 @@ export default class FrienqNotificationModel {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         id : item.id,
-                        notification : item,
+                        data : item,
                         status : "done"
                     },
                     condition : `'${uid}' in topics`
