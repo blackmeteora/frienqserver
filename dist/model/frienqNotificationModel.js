@@ -80,7 +80,8 @@ class FrienqNotificationModel {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         id: item.id,
-                        data: item,
+                        data: item.notification_data,
+                        data2: item.notification_data2,
                         status: "done"
                     },
                     condition: `'${uid}' in topics`
@@ -88,12 +89,19 @@ class FrienqNotificationModel {
                 var notificationText = "";
                 switch (item.notification_type) {
                     case 0:
-                        notificationText = "started to be frienq to you.";
+                        notificationText = "Started to be frienq to you.";
+                        break;
+                    case 1:
+                        notificationText = "Rate to your post.";
+                        break;
+                    case 2:
+                        notificationText = "Commented to your post.";
                         break;
                     default:
                         break;
                 }
-                notification.notification.title = `${frienq.name} ${frienq.surname} ${notificationText}`;
+                notification.notification.title = `${frienq.name} ${frienq.surname}`;
+                notification.notification.body = notificationText;
                 var data = JSON.stringify(notification);
                 const options = {
                     hostname: 'fcm.googleapis.com',
