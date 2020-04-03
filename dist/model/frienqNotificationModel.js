@@ -68,8 +68,7 @@ class FrienqNotificationModel {
                 var frienq = null;
                 if (item.notified)
                     continue;
-                if (item.notification_data != null)
-                    frienq = yield frienqModel_1.default.findByID(item.uid_frienq);
+                frienq = yield frienqModel_1.default.findByID(item.uid_frienq);
                 var notification = {
                     notification: {
                         body: "Frienq",

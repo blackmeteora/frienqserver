@@ -63,7 +63,7 @@ export default class FrienqNotificationModel {
 
             if(item.notified) continue;
             
-            if(item.notification_data!=null) frienq = await FrienqModel.findByID(item.uid_frienq);
+            frienq = await FrienqModel.findByID(item.uid_frienq);
 
             var notification = {
                     notification : {
