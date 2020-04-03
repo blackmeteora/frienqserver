@@ -80,7 +80,7 @@ export default class FrienqNotificationModel {
                         data2 : item.notification_data2,
                         uid_member : frienq.uid,
                         status : "done",
-                        icon : `http://5.11.131.101:3000/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
+                        icon : `/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
                     },
                     condition : `'${uid}' in topics`
             }
