@@ -100,8 +100,8 @@ export default class FrienqNotificationModel {
                     break;
             }
 
-            notification.notification.title = `${frienq.name} ${frienq.surname}`;
-            notification.notification.body =  notificationText;
+            notification.notification.title = `${frienq.name} ${frienq.surname} (@${frienq.username}) `;
+            notification.notification.body =  `${notificationText}`;
 
             var data = JSON.stringify(notification);
 

@@ -101,8 +101,8 @@ class FrienqNotificationModel {
                     default:
                         break;
                 }
-                notification.notification.title = `${frienq.name} ${frienq.surname}`;
-                notification.notification.body = notificationText;
+                notification.notification.title = `${frienq.name} ${frienq.surname} (@${frienq.username}) `;
+                notification.notification.body = `${notificationText}`;
                 var data = JSON.stringify(notification);
                 const options = {
                     hostname: 'fcm.googleapis.com',
