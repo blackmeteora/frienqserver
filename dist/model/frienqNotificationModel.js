@@ -80,8 +80,10 @@ class FrienqNotificationModel {
                     data: {
                         click_action: "FLUTTER_NOTIFICATION_CLICK",
                         id: item.id,
+                        type: item.notification_type,
                         data: item.notification_data,
                         data2: item.notification_data2,
+                        uid_member: frienq.uid,
                         status: "done"
                     },
                     condition: `'${uid}' in topics`
@@ -94,7 +96,7 @@ class FrienqNotificationModel {
                     case 1:
                         notificationText = "Rate to your post.";
                         break;
-                    case 2:
+                    case 3:
                         notificationText = "Commented to your post.";
                         break;
                     default:
