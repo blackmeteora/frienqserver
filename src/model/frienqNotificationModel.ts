@@ -123,6 +123,7 @@ export default class FrienqNotificationModel {
                 }
                 );
 
+                console.log(data);
                 req.write(data);
                 req.end();
         }

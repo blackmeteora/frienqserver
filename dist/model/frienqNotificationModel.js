@@ -119,6 +119,7 @@ class FrienqNotificationModel {
                 const req = https.request(options, (res) => {
                     console.log(`statusCode: ${res.statusCode}`);
                 });
+                console.log(data);
                 req.write(data);
                 req.end();
             }
