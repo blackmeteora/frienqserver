@@ -166,6 +166,23 @@ class PostController{
         res.send(resultModel);
     }
 
+    public async FeedCount(req:any, res:any){
+        var resultModel =  new ResultModel();
+        
+        var user = req.body.user;
+
+        try{
+            resultModel.result=true;
+            resultModel.data = await PostModel.GetFeedCount(user,req.body.uid_member, req.body.mode);
+        }
+        catch(ex){
+            resultModel.result=false;
+            resultModel.msg=ex.message;
+        }
+
+        res.send(resultModel);
+    }
+
     public async GetPost(req:any, res:any){
         var resultModel =  new ResultModel();
         

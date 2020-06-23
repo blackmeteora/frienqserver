@@ -113,6 +113,30 @@ export default class PostModel {
         return postResult[0];
     }
 
+    public static async GetFeedCount(user:any,uid_member:string="", mode:number=0){
+        
+        var self = user.uid == uid_member; //Who is
+
+        let params:any[] = [];
+        
+        var sql = "select Count(*) as ResultCount"
+        "from frienq_post "+
+        "inner join frienq_member on frienq_member.uid=frienq_post.uid_member "+
+        "left join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member and frienq_member_frienq.uid_member='"+user.uid+"' "+
+        "left join frienq_rate on frienq_post.uid_member=frienq_rate.uid_member_to and frienq_rate.id_object=frienq_post.id and frienq_rate.uid_member_from='"+user.uid+"' "+
+        "left join frienq_post_item_select on frienq_post.uid_member=frienq_post_item_select.uid_member_to and frienq_post_item_select.id_post=frienq_post.id and frienq_post_item_select.uid_member_from='"+user.uid+"'"+
+        "where frienq_post.deleted=0 "+
+        /*User Self*/               (self==true && mode==0 ? " and frienq_post.uid_member='"+user.uid+"' " : "")+
+        /*Another User Profile*/    (uid_member!="" && self==false && mode==0 ? " and (frienq_post.uid_member='"+uid_member+"' and ((frienq_post.id_def_security_level=0) or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level=1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0 ))  )) ":"")+
+        /*Feed*/                    (uid_member=="" && self==false && mode==0 ? "  and (frienq_post.uid_member='"+user.uid+"' or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level in (0,1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='"+user.uid+"')>0) )) )":"")+
+        /*Fallowed Posts*/          (mode==1 ? " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null) " : "")+
+        /*Unresponded Posts*/       (mode==2 ? " and (frienq_rate.uid_member_to is null and frienq_post_item_select.uid_member_to is null) " : "");
+
+        var countResult = await database.select(sql,params);
+
+        return countResult;
+    }
+
     public static async GetFeed(user:any,uid_member:string="", lastPost:string="", mode:number=0){
         
         var self = user.uid == uid_member; //Who is

@@ -174,6 +174,21 @@ class PostController {
             res.send(resultModel);
         });
     }
+    FeedCount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var resultModel = new resultModel_1.default();
+            var user = req.body.user;
+            try {
+                resultModel.result = true;
+                resultModel.data = yield postModel_1.default.GetFeedCount(user, req.body.uid_member, req.body.mode);
+            }
+            catch (ex) {
+                resultModel.result = false;
+                resultModel.msg = ex.message;
+            }
+            res.send(resultModel);
+        });
+    }
     GetPost(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var resultModel = new resultModel_1.default();

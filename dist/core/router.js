@@ -39,6 +39,7 @@ class Router {
         //Begin Post Controller
         api.get("/Post/Media", postController_1.default.Media);
         api.post("/Post/Feed", postController_1.default.Feed);
+        api.post("/Post/FeedCount", postController_1.default.Feed);
         api.post("/Post/GetPost", postController_1.default.GetPost);
         api.post("/Post/RatePost", postController_1.default.RatePost);
         api.post("/Post/RateList", postController_1.default.RateList);
