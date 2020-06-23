@@ -112,7 +112,7 @@ class PostModel {
         return __awaiter(this, void 0, void 0, function* () {
             var self = user.uid == uid_member; //Who is
             let params = [];
-            var sql = "select Count(*) as ResultCount";
+            var sql = "select Count(*) as ResultCount ";
             "from frienq_post " +
                 "inner join frienq_member on frienq_member.uid=frienq_post.uid_member " +
                 "left join frienq_member_frienq on frienq_member_frienq.uid_owner=frienq_post.uid_member and frienq_member_frienq.uid_member='" + user.uid + "' " +
