@@ -82,6 +82,7 @@ class FrienqNotificationModel {
                         type: item.notification_type,
                         data: item.notification_data,
                         data2: item.notification_data2,
+                        comment: "",
                         uid_member: frienq.uid,
                         status: "done",
                         icon: `/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
@@ -98,6 +99,8 @@ class FrienqNotificationModel {
                         break;
                     case 3:
                         notificationText = "Commented to your post.";
+                        var comment = yield postModel_1.default.GetComment(notification.data.data2);
+                        notification.data.comment = comment;
                         break;
                     default:
                         break;
