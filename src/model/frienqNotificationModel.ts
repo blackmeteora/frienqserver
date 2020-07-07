@@ -69,7 +69,7 @@ export default class FrienqNotificationModel {
                     notification : {
                         body : "Frienq",
                         title : "",
-                        icon : `http://5.11.131.101:3000/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
+                        icon : `http://5.11.131.101:3000/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}`
                     },
                     priority : "high",
                     data: {
@@ -80,7 +80,8 @@ export default class FrienqNotificationModel {
                         data2 : item.notification_data2,
                         uid_member : frienq.uid,
                         status : "done",
-                        icon : `/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}.jpg`
+                        comment : '',
+                        icon : `/Frienq/GetProfilePicture/?u=${frienq.uid}&f=${frienq.profile_picture}`
                     },
                     condition : `'${uid}' in topics`
             }
@@ -96,8 +97,8 @@ export default class FrienqNotificationModel {
                     break;
                 case 3:
                     notificationText = "Commented to your post."
-                    //var comment = await PostModel.GetComment(notification.data.data2);
-                    //notification.data.comment = comment;
+                    var comment = await PostModel.GetComment(notification.data.data2);
+                    notification.data.comment = comment[0];
                     break;
                 default:
                     break;
