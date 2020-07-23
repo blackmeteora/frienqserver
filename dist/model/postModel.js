@@ -123,7 +123,7 @@ class PostModel {
                 /*Another User Profile*/ (uid_member != "" && self == false && mode == 0 ? " and (frienq_post.uid_member='" + uid_member + "' and ((frienq_post.id_def_security_level=0) or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level=1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='" + user.uid + "')>0 ))  )) " : "") +
                 /*Feed*/ (uid_member == "" && self == false && mode == 0 ? "  and (frienq_post.uid_member='" + user.uid + "' or (frienq_member_frienq.uid_member is not null and (frienq_post.id_def_security_level in (0,1) or (frienq_post.id_def_security_level=2 and (select count(*) from frienq_post_member where id_post=frienq_post.id and uid_member='" + user.uid + "')>0) )) )" : "") +
                 /*Fallowed Posts*/ (mode == 1 ? " and (frienq_rate.uid_member_to is not null or frienq_post_item_select.uid_member_to is not null) " : "") +
-                /*Unresponded Posts*/ (mode == 2 ? " and (frienq_rate.uid_member_to is null and frienq_post_item_select.uid_member_to is null) " : "");
+                /*Unresponded Posts*/ (mode == 2 ? " and (frienq_rate.uid_member_to is null and frienq_post_item_select.uid_member_to is null and frienq_member_frienq.uid_member is not null) " : "");
             var countResult = yield database_1.default.select(sql, params);
             return countResult;
         });
